@@ -4,6 +4,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Page extends JFrame implements ActionListener {
+    JMenuItem openFile;
+    JMenuItem saveFile;
+    JMenuItem findAndReplace;
+    JMenuItem changeFontSize;
+    JMenuItem changeFont;
+    JMenuItem changeFontColor;
+    JMenuItem changeBackgroundColor;
+    JMenuItem exitFile;
+
     Page() {
         this.setTitle("page");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -17,27 +26,27 @@ public class Page extends JFrame implements ActionListener {
         JMenu formatMenu = new JMenu("Format");
         JMenu helpMenu = new JMenu("Help");
 
-        JMenuItem openFile = new JMenuItem("Open");
+        openFile = new JMenuItem("Open");
         openFile.addActionListener(this);
-        JMenuItem saveFile = new JMenuItem("Save");
+        saveFile = new JMenuItem("Save");
         saveFile.addActionListener(this);
-        JMenuItem findAndReplace = new JMenuItem("Find and replace");
+        findAndReplace = new JMenuItem("Find and replace");
         findAndReplace.addActionListener(this);
-        JMenuItem changeSize = new JMenuItem("Size");
-        changeSize.addActionListener(this);
-        JMenuItem changeFont = new JMenuItem("Font");
+        changeFontSize = new JMenuItem("Font size");
+        changeFontSize.addActionListener(this);
+        changeFont = new JMenuItem("Font");
         changeFont.addActionListener(this);
-        JMenuItem changeFontColor = new JMenuItem("Font color");
+        changeFontColor = new JMenuItem("Font color");
         changeFontColor.addActionListener(this);
-        JMenuItem changeBackgroundColor = new JMenuItem("Background color");
+        changeBackgroundColor = new JMenuItem("Background color");
         changeBackgroundColor.addActionListener(this);
-        JMenuItem exitFile = new JMenuItem("Exit"); // maybe add pop-up reminding to save first
+        exitFile = new JMenuItem("Exit"); // maybe add pop-up reminding to save first
         exitFile.addActionListener(this);
 
         fileMenu.add(openFile);
         fileMenu.add(saveFile);
         editMenu.add(findAndReplace);
-        formatMenu.add(changeSize);
+        formatMenu.add(changeFontSize);
         formatMenu.add(changeFont);
         formatMenu.add(changeFontColor);
         formatMenu.add(changeBackgroundColor);
@@ -62,6 +71,19 @@ public class Page extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        Object source = e.getSource();
+        if (openFile.equals(source)) {
+            System.out.println("Opening file");
+        } else if (saveFile.equals(source)) {
+            System.out.println("Saving file");
+        } else if (findAndReplace.equals(source)) {
+            System.out.println("Finding and replacing");
+        } else if (changeFontSize.equals(source)) {
+            System.out.println("Changing font size");
+        } else if (changeFont.equals(source)) {
+            System.out.println("Changing font");
+        } else if (changeFontColor.equals(source)) {
+            System.out.println("Changing font color");
+        }
     }
 }
