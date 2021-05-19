@@ -100,6 +100,14 @@ public class Page extends JFrame implements ActionListener {
             System.out.println("Changing font");
         } else if (changeFontColor.equals(source)) {
             System.out.println("Changing font color");
+        } else if (exitFile.equals(source)) {
+            // how to know if the file has recently been saved?
+            int answer = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to exit without saving?",
+                    "Warning",
+                    JOptionPane.OK_CANCEL_OPTION);
+            if (answer == JOptionPane.OK_OPTION) System.exit(0);
         }
     }
 }
