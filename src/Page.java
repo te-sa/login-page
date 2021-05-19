@@ -2,10 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class Page extends JFrame implements ActionListener {
     JMenuItem openFile;
@@ -85,13 +82,25 @@ public class Page extends JFrame implements ActionListener {
                 File file = fileChooser.getSelectedFile();
                 this.setTitle(file.getName());
                 try (BufferedReader in = new BufferedReader(new FileReader(file))) {
+                    // TODO: fix so that all text is read
                     textPane.setText(in.readLine());
                 } catch (IOException exception) {
                     exception.printStackTrace();
                 }
             }
         } else if (saveFile.equals(source)) {
-            System.out.println("Saving file");
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File("."));
+            int response = fileChooser.showSaveDialog(this);
+            if (response == JFileChooser.APPROVE_OPTION) {
+                // TODO: find out how to change font and background color info
+                File file = fileChooser.getSelectedFile();
+                try (BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
+                    out.write(textPane.getText());
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
         } else if (findAndReplace.equals(source)) {
             System.out.println("Finding and replacing");
         } else if (changeFontSize.equals(source)) {
