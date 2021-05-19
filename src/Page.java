@@ -5,15 +5,15 @@ import java.awt.event.ActionListener;
 import java.io.*;
 
 public class Page extends JFrame implements ActionListener {
-    JMenuItem openFile;
-    JMenuItem saveFile;
-    JMenuItem findAndReplace;
-    JMenuItem changeFontSize;
-    JMenuItem changeFont;
-    JMenuItem changeFontColor;
-    JMenuItem changeBackgroundColor;
-    JMenuItem exitFile;
-    JTextPane textPane;
+    private final JMenuItem openFile;
+    private final JMenuItem saveFile;
+    private final JMenuItem findAndReplace;
+    private final JMenuItem changeFontSize;
+    private final JMenuItem changeFont;
+    private final JMenuItem changeFontColor;
+    private final JMenuItem changeBackgroundColor;
+    private final JMenuItem exitFile;
+    private final JTextPane textPane;
 
     Page() {
         this.setTitle("page");
@@ -84,7 +84,7 @@ public class Page extends JFrame implements ActionListener {
         else if (exitFile.equals(source)) exitFile();
     }
 
-    public void openFile() {
+    private void openFile() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("."));
         int response = fileChooser.showOpenDialog(this);
@@ -92,15 +92,20 @@ public class Page extends JFrame implements ActionListener {
             File file = fileChooser.getSelectedFile();
             this.setTitle(file.getName());
             try (BufferedReader in = new BufferedReader(new FileReader(file))) {
-                // TODO: fix so that all text is read
-                textPane.setText(in.readLine());
+                // used code from https://www.techiedelight.com/how-to-read-a-file-using-bufferedreader-in-java/
+                StringBuilder content = new StringBuilder();
+                String line;
+                while ((line = in.readLine()) != null) {
+                    content.append(line).append(System.lineSeparator());
+                }
+                textPane.setText(new String(content));
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
         }
     }
 
-    public void saveFile() {
+    private void saveFile() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("."));
         int response = fileChooser.showSaveDialog(this);
@@ -115,19 +120,19 @@ public class Page extends JFrame implements ActionListener {
         }
     }
 
-    public void changeFontColor() {
+    private void changeFontColor() {
         // TODO: find out how to color only specific text
         // TODO: fix so color can be changed before text is input
         Color fontColor = JColorChooser.showDialog(this, "Color picker", null);
         textPane.setForeground(fontColor);
     }
 
-    public void changeBackgroundColor() {
+    private void changeBackgroundColor() {
         Color color = JColorChooser.showDialog(this, "Color picker", Color.BLACK);
         textPane.setBackground(color);
     }
 
-    public void exitFile() {
+    private void exitFile() {
         // how to know if the file has recently been saved?
         int answer = JOptionPane.showConfirmDialog(
                 this,
