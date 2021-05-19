@@ -76,7 +76,7 @@ public class Page extends JFrame implements ActionListener {
         if (openFile.equals(source)) openFile();
         else if (saveFile.equals(source)) saveFile();
         else if (findAndReplace.equals(source)) System.out.println("Finding and replacing");
-        else if (changeFontSize.equals(source)) System.out.println("Changing font size");
+        else if (changeFontSize.equals(source)) changeFontSize();
         else if (changeFont.equals(source)) new FontSelector();
         else if (changeFontColor.equals(source)) changeFontColor();
         else if (changeBackgroundColor.equals(source)) changeBackgroundColor();
@@ -117,6 +117,24 @@ public class Page extends JFrame implements ActionListener {
                 ioException.printStackTrace();
             }
         }
+    }
+
+    private void changeFontSize() {
+        // use scroll wheel with sizes instead of input dialog?
+        String result = JOptionPane.showInputDialog(this, "Enter font size: ");
+        // can only enter integer font sizes so far
+        int fontSize;
+        while (true) {
+            try {
+                // TODO: change so you can't have a negative font size
+                fontSize = Integer.parseInt(result);
+                break;
+            } catch (NumberFormatException nfe) {
+                result = JOptionPane.showInputDialog(this, "Invalid size, try again: ");
+            }
+        }
+        textPane.setFont(new Font(textPane.getFont().getFontName(), Font.PLAIN, fontSize));
+        JOptionPane.showMessageDialog(this, "Selected font size: " + fontSize);
     }
 
     private void changeFontColor() {
