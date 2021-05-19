@@ -13,7 +13,7 @@ public class Page extends JFrame implements ActionListener {
     private final JMenuItem changeFontColor;
     private final JMenuItem changeBackgroundColor;
     private final JMenuItem exitFile;
-    private final JTextPane textPane;
+    static final JTextPane textPane = new JTextPane();
 
     Page() {
         this.setTitle("page");
@@ -58,7 +58,6 @@ public class Page extends JFrame implements ActionListener {
         menuBar.add(formatMenu);
         menuBar.add(helpMenu);
 
-        textPane = new JTextPane();
         textPane.setEditable(true);
         textPane.setPreferredSize(new Dimension(500, 500));
 
@@ -78,7 +77,7 @@ public class Page extends JFrame implements ActionListener {
         else if (saveFile.equals(source)) saveFile();
         else if (findAndReplace.equals(source)) System.out.println("Finding and replacing");
         else if (changeFontSize.equals(source)) System.out.println("Changing font size");
-        else if (changeFont.equals(source)) System.out.println("Changing font");
+        else if (changeFont.equals(source)) new FontSelector();
         else if (changeFontColor.equals(source)) changeFontColor();
         else if (changeBackgroundColor.equals(source)) changeBackgroundColor();
         else if (exitFile.equals(source)) exitFile();
