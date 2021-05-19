@@ -74,55 +74,66 @@ public class Page extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        if (openFile.equals(source)) {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setCurrentDirectory(new File("."));
-            int response = fileChooser.showOpenDialog(this);
-            if (response == JFileChooser.APPROVE_OPTION) {
-                File file = fileChooser.getSelectedFile();
-                this.setTitle(file.getName());
-                try (BufferedReader in = new BufferedReader(new FileReader(file))) {
-                    // TODO: fix so that all text is read
-                    textPane.setText(in.readLine());
-                } catch (IOException exception) {
-                    exception.printStackTrace();
-                }
+        if (openFile.equals(source)) openFile();
+        else if (saveFile.equals(source)) saveFile();
+        else if (findAndReplace.equals(source)) System.out.println("Finding and replacing");
+        else if (changeFontSize.equals(source)) System.out.println("Changing font size");
+        else if (changeFont.equals(source)) System.out.println("Changing font");
+        else if (changeFontColor.equals(source)) changeFontColor();
+        else if (changeBackgroundColor.equals(source)) changeBackgroundColor();
+        else if (exitFile.equals(source)) exitFile();
+    }
+
+    public void openFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("."));
+        int response = fileChooser.showOpenDialog(this);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            this.setTitle(file.getName());
+            try (BufferedReader in = new BufferedReader(new FileReader(file))) {
+                // TODO: fix so that all text is read
+                textPane.setText(in.readLine());
+            } catch (IOException exception) {
+                exception.printStackTrace();
             }
-        } else if (saveFile.equals(source)) {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setCurrentDirectory(new File("."));
-            int response = fileChooser.showSaveDialog(this);
-            if (response == JFileChooser.APPROVE_OPTION) {
-                // TODO: find out how to change font and background color info
-                File file = fileChooser.getSelectedFile();
-                try (BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
-                    out.write(textPane.getText());
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-            }
-        } else if (findAndReplace.equals(source)) {
-            System.out.println("Finding and replacing");
-        } else if (changeFontSize.equals(source)) {
-            System.out.println("Changing font size");
-        } else if (changeFont.equals(source)) {
-            System.out.println("Changing font");
-        } else if (changeFontColor.equals(source)) {
-            // TODO: find out how to color only specific text
-            // TODO: fix so color can be changed before text is input
-            Color fontColor = JColorChooser.showDialog(this, "Color picker", Color.BLACK);
-            textPane.setForeground(fontColor);
-        } else if (changeBackgroundColor.equals(source)) {
-            Color color = JColorChooser.showDialog(this, "Color picker", Color.BLACK);
-            textPane.setBackground(color);
-        } else if (exitFile.equals(source)) {
-            // how to know if the file has recently been saved?
-            int answer = JOptionPane.showConfirmDialog(
-                    this,
-                    "Are you sure you want to exit without saving?",
-                    "Warning",
-                    JOptionPane.OK_CANCEL_OPTION);
-            if (answer == JOptionPane.OK_OPTION) System.exit(0);
         }
+    }
+
+    public void saveFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("."));
+        int response = fileChooser.showSaveDialog(this);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            // TODO: find out how to change font and background color info
+            File file = fileChooser.getSelectedFile();
+            try (BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
+                out.write(textPane.getText());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        }
+    }
+
+    public void changeFontColor() {
+        // TODO: find out how to color only specific text
+        // TODO: fix so color can be changed before text is input
+        Color fontColor = JColorChooser.showDialog(this, "Color picker", null);
+        textPane.setForeground(fontColor);
+    }
+
+    public void changeBackgroundColor() {
+        Color color = JColorChooser.showDialog(this, "Color picker", Color.BLACK);
+        textPane.setBackground(color);
+    }
+
+    public void exitFile() {
+        // how to know if the file has recently been saved?
+        int answer = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to exit without saving?",
+                "Warning",
+                JOptionPane.OK_CANCEL_OPTION);
+        if (answer == JOptionPane.OK_OPTION) System.exit(0);
     }
 }
