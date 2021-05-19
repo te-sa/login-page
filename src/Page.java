@@ -99,7 +99,10 @@ public class Page extends JFrame implements ActionListener {
         } else if (changeFont.equals(source)) {
             System.out.println("Changing font");
         } else if (changeFontColor.equals(source)) {
-            System.out.println("Changing font color");
+            // TODO: find out how to color only specific text
+            // TODO: fix so color can be changed before text is input
+            Color fontColor = JColorChooser.showDialog(this, "Color picker", Color.BLACK);
+            textPane.setForeground(fontColor);
         } else if (changeBackgroundColor.equals(source)) {
             Color color = JColorChooser.showDialog(this, "Color picker", Color.BLACK);
             textPane.setBackground(color);
