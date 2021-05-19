@@ -2,6 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Page extends JFrame implements ActionListener {
     JMenuItem openFile;
@@ -12,6 +16,7 @@ public class Page extends JFrame implements ActionListener {
     JMenuItem changeFontColor;
     JMenuItem changeBackgroundColor;
     JMenuItem exitFile;
+    JTextPane textPane;
 
     Page() {
         this.setTitle("page");
@@ -56,7 +61,7 @@ public class Page extends JFrame implements ActionListener {
         menuBar.add(formatMenu);
         menuBar.add(helpMenu);
 
-        JTextPane textPane = new JTextPane();
+        textPane = new JTextPane();
         textPane.setEditable(true);
         textPane.setPreferredSize(new Dimension(500, 500));
 
@@ -73,7 +78,18 @@ public class Page extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (openFile.equals(source)) {
-            System.out.println("Opening file");
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File("."));
+            int response = fileChooser.showOpenDialog(this);
+            if (response == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                this.setTitle(file.getName());
+                try (BufferedReader in = new BufferedReader(new FileReader(file))) {
+                    textPane.setText(in.readLine());
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+            }
         } else if (saveFile.equals(source)) {
             System.out.println("Saving file");
         } else if (findAndReplace.equals(source)) {
