@@ -7,13 +7,15 @@ import java.io.*;
 public class Page extends JFrame implements ActionListener {
     private final JMenuItem openFile;
     private final JMenuItem saveFile;
+    private final JMenuItem saveAndExitFile;
+    private final JMenuItem exitFile;
     private final JMenuItem findAndReplace;
     private final JMenuItem fontStyle;
     private final JMenuItem changeFontSize;
     private final JMenuItem changeFont;
     private final JMenuItem changeFontColor;
     private final JMenuItem changeBackgroundColor;
-    private final JMenuItem exitFile;
+    private final JMenuItem exitProgram;
     static final JTextPane textPane = new JTextPane();
 
     Page() {
@@ -34,6 +36,10 @@ public class Page extends JFrame implements ActionListener {
         openFile.addActionListener(this);
         saveFile = new JMenuItem("Save");
         saveFile.addActionListener(this);
+        saveAndExitFile = new JMenuItem("Save and exit");
+        saveAndExitFile.addActionListener(this);
+        exitFile = new JMenuItem("Exit");
+        exitFile.addActionListener(this);
         findAndReplace = new JMenuItem("Find and replace");
         findAndReplace.addActionListener(this);
         fontStyle = new JMenuItem("Font style");
@@ -46,18 +52,20 @@ public class Page extends JFrame implements ActionListener {
         changeFontColor.addActionListener(this);
         changeBackgroundColor = new JMenuItem("Background color");
         changeBackgroundColor.addActionListener(this);
-        exitFile = new JMenuItem("Exit"); // maybe add pop-up reminding to save first
-        exitFile.addActionListener(this);
+        exitProgram = new JMenuItem("Exit"); // maybe add pop-up reminding to save first
+        exitProgram.addActionListener(this);
 
         fileMenu.add(openFile);
         fileMenu.add(saveFile);
+        fileMenu.add(saveAndExitFile);
+        fileMenu.add(exitFile);
         editMenu.add(findAndReplace);
         formatMenu.add(fontStyle);
         formatMenu.add(changeFontSize);
         formatMenu.add(changeFont);
         formatMenu.add(changeFontColor);
         formatMenu.add(changeBackgroundColor);
-        helpMenu.add(exitFile);
+        helpMenu.add(exitProgram);
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
         menuBar.add(formatMenu);
@@ -80,13 +88,16 @@ public class Page extends JFrame implements ActionListener {
         Object source = e.getSource();
         if (openFile.equals(source)) openFile();
         else if (saveFile.equals(source)) saveFile();
+        else if (exitFile.equals(source)) System.out.println("Exiting file");
+        // TODO: add warning: Are you sure you want to exit the current file without saving?
+        else if (saveAndExitFile.equals(source)) System.out.println("Saving and exiting file");
         else if (findAndReplace.equals(source)) System.out.println("Finding and replacing");
         else if (fontStyle.equals(source)) new FontStyler();
         else if (changeFontSize.equals(source)) new FontSizer();
         else if (changeFont.equals(source)) new FontSelector();
         else if (changeFontColor.equals(source)) changeFontColor();
         else if (changeBackgroundColor.equals(source)) changeBackgroundColor();
-        else if (exitFile.equals(source)) exitFile();
+        else if (exitProgram.equals(source)) exitProgram();
     }
 
     private void openFile() {
@@ -137,7 +148,7 @@ public class Page extends JFrame implements ActionListener {
         textPane.setBackground(color);
     }
 
-    private void exitFile() {
+    private void exitProgram() {
         // how to know if the file has recently been saved?
         int answer = JOptionPane.showConfirmDialog(
                 this,
