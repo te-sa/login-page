@@ -17,9 +17,8 @@ public class FontSelector extends JFrame implements ActionListener {
 
         submitButton = new JButton("submit");
 
-        fonts = new JRadioButton[5];
-
         String[] fontNames = {"American Typewriter", "Arial Black", "Comic Sans MS", "Helvetica", "Papyrus"};
+        fonts = new JRadioButton[fontNames.length];
 
         ButtonGroup radioButtonGroup = new ButtonGroup();
 
@@ -48,9 +47,9 @@ public class FontSelector extends JFrame implements ActionListener {
         if (e.getSource() == submitButton) {
             for (JRadioButton font : fonts) {
                 if (font.isSelected()) {
-                    System.out.println(font.getName()+" selected");
+                    System.out.println(font.getName() + " selected");
                     // using code from https://stackoverflow.com/questions/9336798/java-how-to-get-the-default-font-size-of-a-jtextpane
-                    Page.textPane.setFont(new Font(font.getName(), Font.PLAIN, Page.textPane.getFont().getSize()));
+                    Page.textPane.setFont(new Font(font.getName(), Page.textPane.getFont().getStyle(), Page.textPane.getFont().getSize()));
                     fontSelected = true;
                     this.dispose();
                 }

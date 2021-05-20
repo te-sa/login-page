@@ -8,6 +8,7 @@ public class Page extends JFrame implements ActionListener {
     private final JMenuItem openFile;
     private final JMenuItem saveFile;
     private final JMenuItem findAndReplace;
+    private final JMenuItem fontStyle;
     private final JMenuItem changeFontSize;
     private final JMenuItem changeFont;
     private final JMenuItem changeFontColor;
@@ -34,9 +35,11 @@ public class Page extends JFrame implements ActionListener {
         saveFile.addActionListener(this);
         findAndReplace = new JMenuItem("Find and replace");
         findAndReplace.addActionListener(this);
+        fontStyle = new JMenuItem("Font style");
+        fontStyle.addActionListener(this);
         changeFontSize = new JMenuItem("Font size");
         changeFontSize.addActionListener(this);
-        changeFont = new JMenuItem("Font");
+        changeFont = new JMenuItem("Change font");
         changeFont.addActionListener(this);
         changeFontColor = new JMenuItem("Font color");
         changeFontColor.addActionListener(this);
@@ -48,6 +51,7 @@ public class Page extends JFrame implements ActionListener {
         fileMenu.add(openFile);
         fileMenu.add(saveFile);
         editMenu.add(findAndReplace);
+        formatMenu.add(fontStyle);
         formatMenu.add(changeFontSize);
         formatMenu.add(changeFont);
         formatMenu.add(changeFontColor);
@@ -76,6 +80,7 @@ public class Page extends JFrame implements ActionListener {
         if (openFile.equals(source)) openFile();
         else if (saveFile.equals(source)) saveFile();
         else if (findAndReplace.equals(source)) System.out.println("Finding and replacing");
+        else if (fontStyle.equals(source)) new FontStyler();
         else if (changeFontSize.equals(source)) changeFontSize();
         else if (changeFont.equals(source)) new FontSelector();
         else if (changeFontColor.equals(source)) changeFontColor();
