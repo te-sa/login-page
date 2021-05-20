@@ -17,6 +17,7 @@ public class Page extends JFrame implements ActionListener {
     static final JTextPane textPane = new JTextPane();
 
     Page() {
+        // TODO: make this scrollable
         this.setTitle("page");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setResizable(false); // may change later
@@ -81,7 +82,7 @@ public class Page extends JFrame implements ActionListener {
         else if (saveFile.equals(source)) saveFile();
         else if (findAndReplace.equals(source)) System.out.println("Finding and replacing");
         else if (fontStyle.equals(source)) new FontStyler();
-        else if (changeFontSize.equals(source)) changeFontSize();
+        else if (changeFontSize.equals(source)) new FontSizer();
         else if (changeFont.equals(source)) new FontSelector();
         else if (changeFontColor.equals(source)) changeFontColor();
         else if (changeBackgroundColor.equals(source)) changeBackgroundColor();
@@ -114,7 +115,7 @@ public class Page extends JFrame implements ActionListener {
         fileChooser.setCurrentDirectory(new File("."));
         int response = fileChooser.showSaveDialog(this);
         if (response == JFileChooser.APPROVE_OPTION) {
-            // TODO: find out how to change font and background color info
+            // TODO: find out how to save and recall font and background color info
             File file = fileChooser.getSelectedFile();
             try (BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
                 out.write(textPane.getText());
@@ -122,25 +123,6 @@ public class Page extends JFrame implements ActionListener {
                 ioException.printStackTrace();
             }
         }
-    }
-
-    private void changeFontSize() {
-        // TODO: let user exit even if they didn't enter a font size
-        // use scroll wheel with sizes instead of input dialog?
-        String result = JOptionPane.showInputDialog(this, "Enter font size: ");
-        // can only enter integer font sizes so far
-        int fontSize;
-        while (true) {
-            try {
-                // TODO: change so you can't have a negative font size
-                fontSize = Integer.parseInt(result);
-                break;
-            } catch (NumberFormatException nfe) {
-                result = JOptionPane.showInputDialog(this, "Invalid size, try again: ");
-            }
-        }
-        textPane.setFont(new Font(textPane.getFont().getFontName(), Font.PLAIN, fontSize));
-        JOptionPane.showMessageDialog(this, "Selected font size: " + fontSize);
     }
 
     private void changeFontColor() {

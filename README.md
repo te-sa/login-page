@@ -6,3 +6,4 @@ Ideas:
 - [ ] allow for different users to login, how to save user info?
 - [ ] add feature to set username and password
 - [ ] make it so files can only be opened by certain users (encrypt files?)
+- [ ] allow users to close current document without exiting program
