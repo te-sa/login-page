@@ -48,6 +48,7 @@ public class FontSelector extends JFrame implements ActionListener {
             for (JRadioButton font : fonts) {
                 if (font.isSelected()) {
                     System.out.println(font.getName() + " selected");
+                    System.out.println("Font: "+Page.textPane.getFont().getFontName()+" Style: "+Page.textPane.getFont().getStyle()+" Size: "+Page.textPane.getFont().getSize());
                     // using code from https://stackoverflow.com/questions/9336798/java-how-to-get-the-default-font-size-of-a-jtextpane
                     Page.textPane.setFont(new Font(font.getName(), Page.textPane.getFont().getStyle(), Page.textPane.getFont().getSize()));
                     fontSelected = true;

@@ -125,6 +125,7 @@ public class Page extends JFrame implements ActionListener {
     }
 
     private void changeFontSize() {
+        // TODO: let user exit even if they didn't enter a font size
         // use scroll wheel with sizes instead of input dialog?
         String result = JOptionPane.showInputDialog(this, "Enter font size: ");
         // can only enter integer font sizes so far

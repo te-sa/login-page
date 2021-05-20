@@ -48,6 +48,8 @@ public class FontStyler extends JFrame implements ActionListener {
             for (JRadioButton style : styles) {
                 if (style.isSelected()) {
                     System.out.println(style.getName() + " selected");
+                    System.out.println("Font: "+Page.textPane.getFont().getFontName()+" Style: "+style.getName()+" Size: "+Page.textPane.getFont().getSize());
+                    // TODO: allow for a mix of styles, e.g. Bold + Italic
                     int fontStyle = switch (style.getName()) {
                         case "Bold" -> Font.BOLD;
                         case "Italic" -> Font.ITALIC;
