@@ -22,7 +22,6 @@ public class LoginPage extends JFrame {
         loginButton.addActionListener(e -> {
             // TODO: change so that username and password aren't hardcoded
             if (textField.getText().equals("te-sa") && passwordField.getText().equals("password")) {
-                loginButton.setEnabled(false);
                 this.dispose();
                 new Page();
             } else {
@@ -37,6 +36,10 @@ public class LoginPage extends JFrame {
         });
 
         JButton signUpButton = new JButton("Need an account? Sign up!");
+        signUpButton.addActionListener(e -> {
+            this.dispose();
+            new SignUpPage();
+        });
 
         JPanel topPanel = new JPanel();
         topPanel.setBorder(BorderFactory.createEmptyBorder(15, 25, 0, 25));
