@@ -21,7 +21,7 @@ public class LoginPage extends JFrame {
         this.getRootPane().setDefaultButton(loginButton);
         loginButton.addActionListener(e -> {
             // TODO: change so that username and password aren't hardcoded
-            if (textField.getText().equals("te-sa") && passwordField.getText().equals("password")) {
+            if (takenUsername(textField.getText()) && matchingPassword(passwordField.getText())) {
                 this.dispose();
                 new Page();
             } else {
@@ -38,7 +38,7 @@ public class LoginPage extends JFrame {
         JButton signUpButton = new JButton("Need an account? Sign up!");
         signUpButton.addActionListener(e -> {
             this.dispose();
-            new SignUpPage();
+            new SignupPage();
         });
 
         JPanel topPanel = new JPanel();
@@ -62,5 +62,13 @@ public class LoginPage extends JFrame {
 
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+    }
+
+    public boolean takenUsername(String username) {
+        return username.equals("te-sa");
+    }
+
+    public boolean matchingPassword(String password) {
+        return password.equals("password");
     }
 }
