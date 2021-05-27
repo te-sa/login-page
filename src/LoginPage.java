@@ -36,11 +36,11 @@ public class LoginPage extends JFrame {
             System.exit(0);
         });
 
-        JButton signUpButton = new JButton("Need an account? Sign up");
+        JButton signUpButton = new JButton("Need an account? Sign up!");
 
         JPanel topPanel = new JPanel();
-        topPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
-        topPanel.setLayout(new GridLayout(4, 2));
+        topPanel.setBorder(BorderFactory.createEmptyBorder(15, 25, 0, 25));
+        topPanel.setLayout(new GridLayout(3, 2));
         topPanel.add(l1);
         topPanel.add(textField);
         topPanel.add(l2);
@@ -50,7 +50,7 @@ public class LoginPage extends JFrame {
         this.add(topPanel);
 
         JPanel bottomPanel = new JPanel();
-        bottomPanel.setBorder((BorderFactory.createEmptyBorder(10, 30, 10, 30)));
+        bottomPanel.setBorder((BorderFactory.createEmptyBorder(5, 25, 15, 25)));
         bottomPanel.add(signUpButton);
 
         c.gridy = 1;
