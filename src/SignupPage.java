@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
+import java.util.Scanner;
 
 public class SignupPage extends JFrame {
     SignupPage() {
@@ -18,8 +20,8 @@ public class SignupPage extends JFrame {
         bottomPanel.setBorder((BorderFactory.createEmptyBorder(0, 10, 20, 10)));
         bottomPanel.setLayout(new GridLayout(2, 1));
 
-        JLabel l1 = new JLabel("usernameField: ");
-        JLabel l2 = new JLabel("passwordField: ");
+        JLabel l1 = new JLabel("username: ");
+        JLabel l2 = new JLabel("password: ");
 
         JTextField usernameField = new JTextField();
         usernameField.setPreferredSize(new Dimension(100, 20));
@@ -27,7 +29,16 @@ public class SignupPage extends JFrame {
 
         JButton accountButton = new JButton("Create new account");
         accountButton.addActionListener(e -> {
-            System.out.println("Account created! Username: " + usernameField.getText() + " Password: " + passwordField.getText());
+            String potentialUsername = usernameField.getText();
+            String potentialPassword = passwordField.getText();
+            if (LoginPage.takenUsername(potentialUsername)) {
+                System.out.println("The username " + potentialUsername + " is already taken! You will have to pick another one");
+                // IDEA: autogenerate valid usernames for signup like Reddit
+            } else if (!validPassword(potentialPassword)) {
+                System.out.println("Please choose a valid password");
+            } else {
+                createNewAccount(potentialUsername, potentialPassword);
+            }
             /* TODO: make this functional
             - check if username is already taken
             - if it is, pop up
@@ -59,5 +70,19 @@ public class SignupPage extends JFrame {
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+    }
+
+    public void createNewAccount(String username, String password) {
+        File usernames = new File("usernames.txt");
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(usernames, true))) {
+            out.write("\n" + username);
+            System.out.println("Account created! Username: " + username + " Password: " + password);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public boolean validPassword(String potentialPassword) {
+        return !potentialPassword.isBlank();
     }
 }

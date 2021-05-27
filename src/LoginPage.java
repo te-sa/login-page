@@ -1,7 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class LoginPage extends JFrame {
+    private static String currentUser;
+
     LoginPage() {
         this.setTitle("login-page");
         this.setLayout(new GridBagLayout());
@@ -64,11 +69,25 @@ public class LoginPage extends JFrame {
         this.setVisible(true);
     }
 
-    public boolean takenUsername(String username) {
-        return username.equals("te-sa");
+    public static boolean takenUsername(String username) {
+        File usernames = new File("usernames.txt");
+        boolean taken = false;
+        try (Scanner in = new Scanner(usernames)) {
+            while (in.hasNextLine()) {
+                if (in.nextLine().equals(username)) {
+                    taken = true;
+                    currentUser = username;
+                    break;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return taken;
     }
 
     public boolean matchingPassword(String password) {
+        // TODO: check if username matches password
         return password.equals("password");
     }
 }
