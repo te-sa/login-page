@@ -8,6 +8,8 @@ public class FontStyler extends JFrame implements ActionListener {
     private final JButton submitButton;
 
     FontStyler() {
+        this.setResizable(false);
+
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
@@ -55,7 +57,7 @@ public class FontStyler extends JFrame implements ActionListener {
                         default -> Font.PLAIN;
                     };
                     Page.textPane.setFont(new Font(Page.textPane.getFont().getFontName(), fontStyle, Page.textPane.getFont().getSize()));
-                    System.out.println("Font: "+Page.textPane.getFont().getFontName()+" Style: "+fontStyle+" Size: "+Page.textPane.getFont().getSize());
+                    System.out.println("Font: " + Page.textPane.getFont().getFontName() + " Style: " + fontStyle + " Size: " + Page.textPane.getFont().getSize());
                     styleSelected = true;
                     this.dispose();
                 }

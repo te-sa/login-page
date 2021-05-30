@@ -8,6 +8,8 @@ public class FontSizer extends JFrame implements ActionListener {
     private final JButton submitButton;
 
     FontSizer() {
+        this.setResizable(false);
+
         JPanel panel = new JPanel();
         // could add scroll bar?
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));

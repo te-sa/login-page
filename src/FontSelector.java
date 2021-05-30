@@ -8,6 +8,8 @@ public class FontSelector extends JFrame implements ActionListener {
     private final JButton submitButton;
 
     FontSelector() {
+        this.setResizable(false);
+
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
