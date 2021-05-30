@@ -80,9 +80,9 @@ public class LoginPage extends JFrame {
                 if (in.nextLine().equals(username)) {
                     taken = true;
                     currentUser = username;
-                    userID++;
                     break;
                 }
+                userID++;
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
