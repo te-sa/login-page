@@ -6,6 +6,7 @@ import java.io.*;
 
 public class Page extends JFrame implements ActionListener {
     private final JMenuItem openFile;
+    private final JMenuItem changeFileName;
     private final JMenuItem saveFile;
     private final JMenuItem saveAndExitFile;
     private final JMenuItem exitFile;
@@ -35,6 +36,8 @@ public class Page extends JFrame implements ActionListener {
 
         openFile = new JMenuItem("Open");
         openFile.addActionListener(this);
+        changeFileName = new JMenuItem("Change file name");
+        changeFileName.addActionListener(this);
         saveFile = new JMenuItem("Save");
         saveFile.addActionListener(this);
         saveAndExitFile = new JMenuItem("Save and exit");
@@ -59,6 +62,7 @@ public class Page extends JFrame implements ActionListener {
         exitProgram.addActionListener(this);
 
         fileMenu.add(openFile);
+        fileMenu.add(changeFileName);
         fileMenu.add(saveFile);
         fileMenu.add(saveAndExitFile);
         fileMenu.add(exitFile);
@@ -92,6 +96,7 @@ public class Page extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (openFile.equals(source)) openFile();
+        else if (changeFileName.equals(source)) changeFileName();
         else if (saveFile.equals(source)) saveFile();
         else if (exitFile.equals(source)) System.out.println("Exiting file");
             // TODO: add warning: Are you sure you want to exit the current file without saving?
@@ -125,6 +130,14 @@ public class Page extends JFrame implements ActionListener {
                 exception.printStackTrace();
             }
         }
+    }
+
+    private void changeFileName() {
+        // how to know which file is currently being edited?
+        File file = new File(this.getTitle());
+        // TODO: make JOptionPane to get user input, check userInput for validity, can't change file type (?)
+//        file.renameTo();
+        System.out.println("Changing file name");
     }
 
     private void saveFile() {
