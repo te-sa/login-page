@@ -91,7 +91,6 @@ public class LoginPage extends JFrame {
     }
 
     public boolean matchingPassword(String password) {
-        // TODO: check if username matches password
         File passwords = new File("passwords.txt");
         String userPassword = "";
         try (Scanner in = new Scanner(passwords)) {

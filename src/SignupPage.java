@@ -82,8 +82,9 @@ public class SignupPage extends JFrame {
             BufferedWriter outPasswords = new BufferedWriter(new FileWriter(passwords, true));
             outPasswords.write("\n" + password);
             outPasswords.close();
-            // TODO: make this a JOptionPane that gets the user back to the login page
-            System.out.println("Welcome, " + username + ", your account has been created! Make sure to save your login info!");
+            JOptionPane.showMessageDialog(this, "Welcome, " + username + ", your account has been created! Make sure to save your login info!");
+            this.dispose();
+            new LoginPage();
             // TODO: add security question?
         } catch (IOException exception) {
             exception.printStackTrace();
