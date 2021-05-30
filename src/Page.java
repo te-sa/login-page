@@ -54,6 +54,7 @@ public class Page extends JFrame implements ActionListener {
         changeBackgroundColor = new JMenuItem("Background color");
         changeBackgroundColor.addActionListener(this);
         backToLogin = new JMenuItem("Log out");
+        backToLogin.addActionListener(this);
         exitProgram = new JMenuItem("Log out and exit"); // maybe add pop-up reminding to save first
         exitProgram.addActionListener(this);
 

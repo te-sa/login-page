@@ -73,22 +73,22 @@ public class SignupPage extends JFrame {
     }
 
     public void createNewAccount(String username, String password) {
+        // TODO: add security question?
         File usernames = new File("usernames.txt");
         File passwords = new File("passwords.txt");
-        try {
-            BufferedWriter outUsernames = new BufferedWriter(new FileWriter(usernames, true));
-            outUsernames.write("\n" + username);
-            outUsernames.close();
-            BufferedWriter outPasswords = new BufferedWriter(new FileWriter(passwords, true));
-            outPasswords.write("\n" + password);
-            outPasswords.close();
-            JOptionPane.showMessageDialog(this, "Welcome, " + username + ", your account has been created! Make sure to save your login info!");
-            this.dispose();
-            new LoginPage();
-            // TODO: add security question?
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(usernames, true))) {
+            out.write("\n" + username);
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(passwords, true))) {
+            out.write("\n" + password);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        JOptionPane.showMessageDialog(this, "Welcome, " + username + ", your account has been created! Make sure to save your login info!");
+        this.dispose();
+        new LoginPage();
     }
 
     public boolean validPassword(String potentialPassword) {

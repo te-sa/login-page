@@ -75,11 +75,15 @@ public class LoginPage extends JFrame {
     public static boolean takenUsername(String username) {
         File usernames = new File("usernames.txt");
         boolean taken = false;
+        int userID = 0;
+        // needed to make the userID a local var here and assign it to the static global var later to fix a bug with the userID
+        // is there a better fix?
         try (Scanner in = new Scanner(usernames)) {
             while (in.hasNextLine()) {
                 if (in.nextLine().equals(username)) {
                     taken = true;
                     currentUser = username;
+                    LoginPage.userID = userID;
                     break;
                 }
                 userID++;
