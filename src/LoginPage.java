@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class LoginPage extends JFrame {
     private static String currentUser;
+    private static int userID;
 
     LoginPage() {
         this.setTitle("login-page");
@@ -26,7 +27,9 @@ public class LoginPage extends JFrame {
         this.getRootPane().setDefaultButton(loginButton);
         loginButton.addActionListener(e -> {
             // TODO: change so that username and password aren't hardcoded
-            if (takenUsername(textField.getText()) && matchingPassword(passwordField.getText())) {
+            String inputUsername = textField.getText();
+            String inputPassword = passwordField.getText();
+            if (takenUsername(inputUsername) && matchingPassword(inputPassword)) {
                 this.dispose();
                 new Page();
             } else {
@@ -77,6 +80,7 @@ public class LoginPage extends JFrame {
                 if (in.nextLine().equals(username)) {
                     taken = true;
                     currentUser = username;
+                    userID++;
                     break;
                 }
             }
@@ -88,6 +92,16 @@ public class LoginPage extends JFrame {
 
     public boolean matchingPassword(String password) {
         // TODO: check if username matches password
-        return password.equals("password");
+        File passwords = new File("passwords.txt");
+        String userPassword = "";
+        try (Scanner in = new Scanner(passwords)) {
+            for (int i = 0; i < userID; i++) {
+                in.nextLine();
+            }
+            userPassword = in.nextLine();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return password.equals(userPassword);
     }
 }

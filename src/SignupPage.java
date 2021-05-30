@@ -1,10 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.util.Scanner;
 
 public class SignupPage extends JFrame {
     SignupPage() {
+        // TODO: add a user-counter and display message: You are the nth user!
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("signup-page");
         this.setResizable(false);
@@ -74,15 +74,24 @@ public class SignupPage extends JFrame {
 
     public void createNewAccount(String username, String password) {
         File usernames = new File("usernames.txt");
-        try (BufferedWriter out = new BufferedWriter(new FileWriter(usernames, true))) {
-            out.write("\n" + username);
-            System.out.println("Account created! Username: " + username + " Password: " + password);
+        File passwords = new File("passwords.txt");
+        try {
+            BufferedWriter outUsernames = new BufferedWriter(new FileWriter(usernames, true));
+            outUsernames.write("\n" + username);
+            outUsernames.close();
+            BufferedWriter outPasswords = new BufferedWriter(new FileWriter(passwords, true));
+            outPasswords.write("\n" + password);
+            outPasswords.close();
+            // TODO: make this a JOptionPane that gets the user back to the login page
+            System.out.println("Welcome, " + username + ", your account has been created! Make sure to save your login info!");
+            // TODO: add security question?
         } catch (IOException exception) {
             exception.printStackTrace();
         }
     }
 
     public boolean validPassword(String potentialPassword) {
+        // what should a valid password have?
         return !potentialPassword.isBlank();
     }
 }
