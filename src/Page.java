@@ -15,6 +15,7 @@ public class Page extends JFrame implements ActionListener {
     private final JMenuItem changeFont;
     private final JMenuItem changeFontColor;
     private final JMenuItem changeBackgroundColor;
+    private final JMenuItem backToLogin;
     private final JMenuItem exitProgram;
     static final JTextPane textPane = new JTextPane();
 
@@ -52,7 +53,8 @@ public class Page extends JFrame implements ActionListener {
         changeFontColor.addActionListener(this);
         changeBackgroundColor = new JMenuItem("Background color");
         changeBackgroundColor.addActionListener(this);
-        exitProgram = new JMenuItem("Exit"); // maybe add pop-up reminding to save first
+        backToLogin = new JMenuItem("Log out");
+        exitProgram = new JMenuItem("Log out and exit"); // maybe add pop-up reminding to save first
         exitProgram.addActionListener(this);
 
         fileMenu.add(openFile);
@@ -65,11 +67,13 @@ public class Page extends JFrame implements ActionListener {
         formatMenu.add(changeFont);
         formatMenu.add(changeFontColor);
         formatMenu.add(changeBackgroundColor);
+        helpMenu.add(backToLogin);
         helpMenu.add(exitProgram);
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
         menuBar.add(formatMenu);
         menuBar.add(helpMenu);
+        // TODO: add option to change password
 
         textPane.setEditable(true);
         textPane.setPreferredSize(new Dimension(500, 500));
@@ -89,7 +93,7 @@ public class Page extends JFrame implements ActionListener {
         if (openFile.equals(source)) openFile();
         else if (saveFile.equals(source)) saveFile();
         else if (exitFile.equals(source)) System.out.println("Exiting file");
-        // TODO: add warning: Are you sure you want to exit the current file without saving?
+            // TODO: add warning: Are you sure you want to exit the current file without saving?
         else if (saveAndExitFile.equals(source)) System.out.println("Saving and exiting file");
         else if (findAndReplace.equals(source)) System.out.println("Finding and replacing");
         else if (fontStyle.equals(source)) new FontStyler();
@@ -97,6 +101,7 @@ public class Page extends JFrame implements ActionListener {
         else if (changeFont.equals(source)) new FontSelector();
         else if (changeFontColor.equals(source)) changeFontColor();
         else if (changeBackgroundColor.equals(source)) changeBackgroundColor();
+        else if (backToLogin.equals(source)) backToLogin();
         else if (exitProgram.equals(source)) exitProgram();
     }
 
@@ -146,6 +151,11 @@ public class Page extends JFrame implements ActionListener {
     private void changeBackgroundColor() {
         Color color = JColorChooser.showDialog(this, "Color picker", Color.BLACK);
         textPane.setBackground(color);
+    }
+
+    private void backToLogin() {
+        this.dispose();
+        new LoginPage();
     }
 
     private void exitProgram() {
