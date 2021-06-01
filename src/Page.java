@@ -24,7 +24,7 @@ public class Page extends JFrame implements ActionListener {
         // TODO: make this scrollable
         this.setTitle("page");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setResizable(false); // may change later
+//        this.setResizable(false);
 
         JMenuBar menuBar = new JMenuBar();
         this.setJMenuBar(menuBar);
@@ -82,11 +82,11 @@ public class Page extends JFrame implements ActionListener {
 
         textPane.setEditable(true);
         textPane.setPreferredSize(new Dimension(500, 500));
+        // TODO: fix: if words are too long, they go off the page
 
-        JPanel panel = new JPanel();
-        panel.add(textPane);
+        JScrollPane scrollPane = new JScrollPane(textPane);
 
-        this.add(panel);
+        this.add(scrollPane);
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -98,7 +98,7 @@ public class Page extends JFrame implements ActionListener {
         if (openFile.equals(source)) openFile();
         else if (changeFileName.equals(source)) changeFileName();
         else if (saveFile.equals(source)) saveFile();
-        else if (exitFile.equals(source)) System.out.println("Exiting file");
+        else if (exitFile.equals(source)) exitFile();
             // TODO: add warning: Are you sure you want to exit the current file without saving?
         else if (saveAndExitFile.equals(source)) System.out.println("Saving and exiting file");
         else if (findAndReplace.equals(source)) System.out.println("Finding and replacing");
@@ -133,11 +133,16 @@ public class Page extends JFrame implements ActionListener {
     }
 
     private void changeFileName() {
+        // TODO: work on this
         // how to know which file is currently being edited?
         File file = new File(this.getTitle());
         // TODO: make JOptionPane to get user input, check userInput for validity, can't change file type (?)
+        String answer = JOptionPane.showInputDialog("Enter new file name here: ");
 //        file.renameTo();
-        System.out.println("Changing file name");
+        File renamed = new File(answer);
+        System.out.println("Changing file name to " + answer);
+//        file.renameTo(renamed);
+//        this.setTitle(renamed.getName());
     }
 
     private void saveFile() {
@@ -153,6 +158,15 @@ public class Page extends JFrame implements ActionListener {
                 ioException.printStackTrace();
             }
         }
+    }
+
+    private void exitFile() {
+        // How to know if file has recently been saved?
+        System.out.println("Are you sure you want to exit the current file without saving?");
+        this.dispose();
+        // not working yet
+//        textPane.setText("");
+        new Page();
     }
 
     private void changeFontColor() {
