@@ -152,6 +152,8 @@ public class Page extends JFrame implements ActionListener {
 
     private void saveFile() {
         JFileChooser fileChooser = new JFileChooser();
+        // https://stackoverflow.com/questions/356671/jfilechooser-showsavedialog-how-to-set-suggested-file-name
+        fileChooser.setSelectedFile(new File(this.getTitle()));
         fileChooser.setCurrentDirectory(new File("."));
         int response = fileChooser.showSaveDialog(this);
         if (response == JFileChooser.APPROVE_OPTION) {
