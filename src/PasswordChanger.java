@@ -2,7 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class PasswordChanger extends JFrame implements ActionListener {
     private final JPasswordField passwordField;
@@ -28,12 +33,6 @@ public class PasswordChanger extends JFrame implements ActionListener {
         this.getRootPane().setDefaultButton(confirmButton);
         confirmButton.addActionListener(this);
 
-        // need to see if input in password field matches current user password
-
-        // need to check if content in newPasswordField and confirmNewPasswordField match
-
-        // then: change password + success message
-
         panel.add(l1);
         panel.add(passwordField);
         panel.add(l2);
@@ -54,7 +53,28 @@ public class PasswordChanger extends JFrame implements ActionListener {
         // I don't think matching like this is enough, any user can change any other users password rn
         if (LoginPage.matchingPassword(passwordField.getText())) {
             if (Arrays.equals(newPasswordField.getPassword(), confirmNewPasswordField.getPassword())) {
+                // how to actually change password?
+                // reference: https://stackoverflow.com/questions/20039980/java-replace-line-in-text-file
+                File passwords = new File("passwords.txt");
+                StringBuffer buffer = new StringBuffer();
+                try (Scanner in = new Scanner(passwords)) {
+                    int lineCounter = 0;
+                    while (in.hasNextLine()) {
+                        if (lineCounter == LoginPage.userID) {
+                            buffer.append(newPasswordField.getText()).append(System.lineSeparator());
+                        } else buffer.append(in.nextLine()).append(System.lineSeparator());
+                        lineCounter++;
+                    }
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+                try (BufferedWriter out = new BufferedWriter(new FileWriter(passwords))) {
+                    out.write(String.valueOf(buffer));
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
                 System.out.println("Password change successful!");
+                this.dispose();
             } else {
                 System.out.println("Passwords don't match");
             }
