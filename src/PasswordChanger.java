@@ -50,6 +50,7 @@ public class PasswordChanger extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        // TODO: make println statements into JOptionPanes
         // I don't think matching like this is enough, any user can change any other users password rn
         // seems like that isn't an issue
         if (LoginPage.matchingPassword(passwordField.getText())) {

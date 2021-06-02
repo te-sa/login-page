@@ -5,8 +5,9 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class LoginPage extends JFrame {
+    // I feel like I still don't quite get how static variables work
     private static String currentUser;
-    private static int userID;
+    protected static int userID;
 
     LoginPage() {
         this.setTitle("login-page");
@@ -94,7 +95,7 @@ public class LoginPage extends JFrame {
         return taken;
     }
 
-    public boolean matchingPassword(String password) {
+    public static boolean matchingPassword(String password) {
         File passwords = new File("passwords.txt");
         String userPassword = "";
         try (Scanner in = new Scanner(passwords)) {

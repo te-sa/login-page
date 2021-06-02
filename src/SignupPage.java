@@ -87,6 +87,8 @@ public class SignupPage extends JFrame {
             exception.printStackTrace();
         }
         JOptionPane.showMessageDialog(this, "Welcome, " + username + ", your account has been created! Make sure to save your login info!");
+        // TODO: maybe add redirect message, the pages look almost identical
+        // something like: redirecting you to login... (maybe even add a progress bar to the "loading page")
         this.dispose();
         new LoginPage();
     }
