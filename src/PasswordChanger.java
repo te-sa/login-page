@@ -51,17 +51,19 @@ public class PasswordChanger extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // I don't think matching like this is enough, any user can change any other users password rn
+        // seems like that isn't an issue
         if (LoginPage.matchingPassword(passwordField.getText())) {
             if (Arrays.equals(newPasswordField.getPassword(), confirmNewPasswordField.getPassword())) {
                 // how to actually change password?
                 // reference: https://stackoverflow.com/questions/20039980/java-replace-line-in-text-file
                 File passwords = new File("passwords.txt");
-                StringBuffer buffer = new StringBuffer();
+                StringBuilder buffer = new StringBuilder();
                 try (Scanner in = new Scanner(passwords)) {
                     int lineCounter = 0;
                     while (in.hasNextLine()) {
                         if (lineCounter == LoginPage.userID) {
                             buffer.append(newPasswordField.getText()).append(System.lineSeparator());
+                            in.nextLine(); // need to skip original password
                         } else buffer.append(in.nextLine()).append(System.lineSeparator());
                         lineCounter++;
                     }
