@@ -16,12 +16,13 @@ public class Page extends JFrame implements ActionListener {
     private final JMenuItem changeFont;
     private final JMenuItem changeFontColor;
     private final JMenuItem changeBackgroundColor;
+    private final JMenuItem changePassword;
     private final JMenuItem backToLogin;
     private final JMenuItem exitProgram;
+
     static final JTextPane textPane = new JTextPane();
 
     Page() {
-        // TODO: make this scrollable
         this.setTitle("page");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 //        this.setResizable(false);
@@ -56,6 +57,8 @@ public class Page extends JFrame implements ActionListener {
         changeFontColor.addActionListener(this);
         changeBackgroundColor = new JMenuItem("Background color");
         changeBackgroundColor.addActionListener(this);
+        changePassword = new JMenuItem("Change password");
+        changePassword.addActionListener(this);
         backToLogin = new JMenuItem("Log out");
         backToLogin.addActionListener(this);
         exitProgram = new JMenuItem("Log out and exit"); // maybe add pop-up reminding to save first
@@ -72,6 +75,7 @@ public class Page extends JFrame implements ActionListener {
         formatMenu.add(changeFont);
         formatMenu.add(changeFontColor);
         formatMenu.add(changeBackgroundColor);
+        helpMenu.add(changePassword);
         helpMenu.add(backToLogin);
         helpMenu.add(exitProgram);
         menuBar.add(fileMenu);
@@ -107,6 +111,7 @@ public class Page extends JFrame implements ActionListener {
         else if (changeFont.equals(source)) new FontSelector();
         else if (changeFontColor.equals(source)) changeFontColor();
         else if (changeBackgroundColor.equals(source)) changeBackgroundColor();
+        else if (changePassword.equals(source)) new PasswordChanger();
         else if (backToLogin.equals(source)) backToLogin();
         else if (exitProgram.equals(source)) exitProgram();
     }
