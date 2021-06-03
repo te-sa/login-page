@@ -29,7 +29,7 @@ public class LoginPage extends JFrame {
         loginButton.addActionListener(e -> {
             // TODO: change so that username and password aren't hardcoded
             String inputUsername = textField.getText();
-            String inputPassword = passwordField.getText();
+            String inputPassword = String.valueOf(passwordField.getPassword());
             if (takenUsername(inputUsername) && matchingPassword(inputPassword)) {
                 this.dispose();
                 new Page();
@@ -38,6 +38,7 @@ public class LoginPage extends JFrame {
             }
         });
 
+        // make clear button instead of cancel button?
         JButton exitButton = new JButton("exit");
         exitButton.addActionListener(e -> {
             this.dispose();

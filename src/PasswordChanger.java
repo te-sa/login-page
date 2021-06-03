@@ -53,7 +53,7 @@ public class PasswordChanger extends JFrame implements ActionListener {
         // TODO: make println statements into JOptionPanes
         // I don't think matching like this is enough, any user can change any other users password rn
         // seems like that isn't an issue
-        if (LoginPage.matchingPassword(passwordField.getText())) {
+        if (LoginPage.matchingPassword(String.valueOf(passwordField.getPassword()))) {
             if (Arrays.equals(newPasswordField.getPassword(), confirmNewPasswordField.getPassword())) {
                 // how to actually change password?
                 // reference: https://stackoverflow.com/questions/20039980/java-replace-line-in-text-file
@@ -63,7 +63,7 @@ public class PasswordChanger extends JFrame implements ActionListener {
                     int lineCounter = 0;
                     while (in.hasNextLine()) {
                         if (lineCounter == LoginPage.userID) {
-                            buffer.append(newPasswordField.getText()).append(System.lineSeparator());
+                            buffer.append(String.valueOf(newPasswordField.getPassword())).append(System.lineSeparator());
                             in.nextLine(); // need to skip original password
                         } else buffer.append(in.nextLine()).append(System.lineSeparator());
                         lineCounter++;
