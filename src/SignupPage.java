@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.*;
 
@@ -32,21 +33,13 @@ public class SignupPage extends JFrame {
             String potentialUsername = usernameField.getText();
             String potentialPassword = passwordField.getText();
             if (LoginPage.takenUsername(potentialUsername)) {
-                System.out.println("The username " + potentialUsername + " is already taken! You will have to pick another one");
+                JOptionPane.showMessageDialog(this, "The username " + potentialUsername + " is already taken!\nYou will have to pick another one", "", JOptionPane.ERROR_MESSAGE);
                 // IDEA: autogenerate valid usernames for signup like Reddit
             } else if (!validPassword(potentialPassword)) {
-                System.out.println("Please choose a valid password");
+                JOptionPane.showMessageDialog(this, "Please choose a valid password", "", JOptionPane.WARNING_MESSAGE);
             } else {
                 createNewAccount(potentialUsername, potentialPassword);
             }
-            /* TODO: make this functional
-            - check if username is already taken
-            - if it is, pop up
-            - else create new account
-            - only create account if valid info is input, check password
-            - where to save account info?
-            - how to encrypt it?
-             */
         });
         this.getRootPane().setDefaultButton(accountButton);
 
@@ -74,6 +67,7 @@ public class SignupPage extends JFrame {
 
     public void createNewAccount(String username, String password) {
         // TODO: add security question?
+        // this only works if there is an account in there already, it wouldn't work for the first one
         File usernames = new File("usernames.txt");
         File passwords = new File("passwords.txt");
         try (BufferedWriter out = new BufferedWriter(new FileWriter(usernames, true))) {
@@ -86,15 +80,54 @@ public class SignupPage extends JFrame {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-        JOptionPane.showMessageDialog(this, "Welcome, " + username + ", your account has been created! Make sure to save your login info!");
-        // TODO: maybe add redirect message, the pages look almost identical
-        // something like: redirecting you to login... (maybe even add a progress bar to the "loading page")
+        JOptionPane.showMessageDialog(this, "Welcome, " + username + ", your account has been created!\nMake sure to save your login info!");
+        new RedirectScreen();
         this.dispose();
         new LoginPage();
     }
 
     public boolean validPassword(String potentialPassword) {
+        // TODO: make this work
         // what should a valid password have?
         return !potentialPassword.isBlank();
+    }
+}
+
+class RedirectScreen extends JFrame {
+    JProgressBar bar;
+
+    RedirectScreen() {
+        bar = new JProgressBar(0, 100);
+        bar.setValue(0);
+        bar.setStringPainted(true);
+        bar.setOpaque(true);
+
+        JLabel label = new JLabel("Redirecting you to login...");
+
+        JPanel panel = new JPanel(new GridLayout(2, 1));
+        panel.setBorder(new EmptyBorder(15, 25, 15, 25));
+        panel.add(label);
+        panel.add(bar);
+
+        this.add(panel);
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+        fill();
+    }
+
+    // used code from: https://www.youtube.com/watch?v=JEI-fcfnFkc
+    public void fill() {
+        int counter = 0;
+        while (counter <= 100) {
+            bar.setValue(counter);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            counter += 10;
+        }
+        this.dispose();
     }
 }
