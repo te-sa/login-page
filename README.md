@@ -3,7 +3,7 @@ Trying to learn more about Git, GitHub, File IO, and Swing GUIs by creating a te
 
 Ideas:
 - [ ] allow users to change file names in editor
-- [ ] allow users to change their passwords (should usernames be changeable?)
+- [X] allow users to change their passwords (should usernames be changeable?)
 - [X] allow for different users to login, how to save user info?
 - [X] add feature to set username and password
 - [ ] make it so files can only be opened by certain users (encrypt files?)

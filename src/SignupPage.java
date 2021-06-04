@@ -88,11 +88,29 @@ public class SignupPage extends JFrame {
 
     public boolean validPassword(String potentialPassword) {
         // TODO: make this work
+        // use regex here?
+
+        // how long should a password be? At least 8 chars
         // what should a valid password have?
-        return !potentialPassword.isBlank();
+        // - upper and lower case letters
+        // - letters and numbers
+        // - at least one special character
+
+        if (potentialPassword.length() < 8) {
+            System.out.println("Your password should contain at least 8 characters");
+            return false;
+        } else if (potentialPassword.toUpperCase().equals(potentialPassword)
+                || potentialPassword.toLowerCase().equals(potentialPassword)) {
+            System.out.println("Your password should contain both uppercase and lowercase letters");
+            return false;
+        } else {
+            return true;
+        }
+
     }
 }
 
+// why is this not working when called from SignupPage?
 class RedirectScreen extends JFrame {
     JProgressBar bar;
 
@@ -116,7 +134,7 @@ class RedirectScreen extends JFrame {
         fill();
     }
 
-    // used code from: https://www.youtube.com/watch?v=JEI-fcfnFkc
+    // used code from: https://www.youtube.com/watch?v=JEI-fcfnFkc and https://www.geeksforgeeks.org/java-swing-jprogressbar/
     public void fill() {
         int counter = 0;
         while (counter <= 100) {

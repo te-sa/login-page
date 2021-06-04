@@ -82,7 +82,6 @@ public class Page extends JFrame implements ActionListener {
         menuBar.add(editMenu);
         menuBar.add(formatMenu);
         menuBar.add(helpMenu);
-        // TODO: add option to change password
 
         textPane.setEditable(true);
         textPane.setPreferredSize(new Dimension(500, 500));
