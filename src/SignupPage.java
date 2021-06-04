@@ -2,6 +2,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SignupPage extends JFrame {
     SignupPage() {
@@ -86,7 +88,7 @@ public class SignupPage extends JFrame {
         new LoginPage();
     }
 
-    public boolean validPassword(String potentialPassword) {
+    public static boolean validPassword(String potentialPassword) {
         // TODO: make this work
         // use regex here?
 
@@ -96,6 +98,13 @@ public class SignupPage extends JFrame {
         // - letters and numbers
         // - at least one special character
 
+        // regex from https://stackoverflow.com/questions/18057962/regex-pattern-including-all-special-characters/18058074
+        Pattern specialChars = Pattern.compile("[^\\w\\s]");
+        Matcher matchSpecial = specialChars.matcher(potentialPassword);
+
+        Pattern number = Pattern.compile("[0-9]");
+        Matcher matchNums = number.matcher(potentialPassword);
+
         if (potentialPassword.length() < 8) {
             System.out.println("Your password should contain at least 8 characters");
             return false;
@@ -103,7 +112,14 @@ public class SignupPage extends JFrame {
                 || potentialPassword.toLowerCase().equals(potentialPassword)) {
             System.out.println("Your password should contain both uppercase and lowercase letters");
             return false;
+        } else if (!matchNums.find()) {
+            System.out.println("Your password should contain at least one number");
+            return false;
+        } else if (!matchSpecial.find()) {
+            System.out.println("Your password should contain at least one special character");
+            return false;
         } else {
+            System.out.println("Valid password");
             return true;
         }
 
