@@ -116,8 +116,11 @@ public class Page extends JFrame implements ActionListener {
     }
 
     private void openFile() {
+        // how to make it so only text-files can be opened?
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("."));
+        fileChooser.addChoosableFileFilter(new TextFileFilter());
+        fileChooser.setAcceptAllFileFilterUsed(false);
         int response = fileChooser.showOpenDialog(this);
         if (response == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
@@ -150,6 +153,7 @@ public class Page extends JFrame implements ActionListener {
     }
 
     private void saveFile() {
+        // do I need to add a filter so files can only be saved with valid extensions?
         JFileChooser fileChooser = new JFileChooser();
         // https://stackoverflow.com/questions/356671/jfilechooser-showsavedialog-how-to-set-suggested-file-name
         fileChooser.setSelectedFile(new File(this.getTitle()));
