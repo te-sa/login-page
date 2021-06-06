@@ -8,3 +8,7 @@ Ideas:
 - [X] add feature to set username and password
 - [ ] make it so files can only be opened by certain users (encrypt files?)
 - [ ] allow users to close current document without exiting program
+
+More things to learn about:
+- using RegEx
+- unit testing

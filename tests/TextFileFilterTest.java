@@ -9,5 +9,6 @@ public class TextFileFilterTest {
     public void getExtension() {
         Assert.assertEquals(".txt",TextFileFilter.getExtension(new File("example.txt")));
         Assert.assertEquals(".md",TextFileFilter.getExtension(new File("example.md")));
+        Assert.assertNull(TextFileFilter.getExtension(new File("example")));
     }
 }

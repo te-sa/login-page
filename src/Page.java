@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,14 +17,14 @@ public class Page extends JFrame implements ActionListener {
     private final JMenuItem changeBackgroundColor;
     private final JMenuItem changePassword;
     private final JMenuItem backToLogin;
-    private final JMenuItem exitProgram;
+    private final JMenuItem quitProgram;
 
     static final JTextPane textPane = new JTextPane();
 
     Page() {
         this.setTitle("page");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//        this.setResizable(false);
+        this.setResizable(false);
 
         JMenuBar menuBar = new JMenuBar();
         this.setJMenuBar(menuBar);
@@ -37,12 +36,8 @@ public class Page extends JFrame implements ActionListener {
 
         openFile = new JMenuItem("Open");
         openFile.addActionListener(this);
-//        changeFileName = new JMenuItem("Change file name");
-//        changeFileName.addActionListener(this);
         saveFile = new JMenuItem("Save");
         saveFile.addActionListener(this);
-//        saveAndExitFile = new JMenuItem("Save and exit");
-//        saveAndExitFile.addActionListener(this);
         exitFile = new JMenuItem("Exit");
         exitFile.addActionListener(this);
         findInFile = new JMenuItem("Find...");
@@ -53,7 +48,7 @@ public class Page extends JFrame implements ActionListener {
         changeFontStyle.addActionListener(this);
         changeFontSize = new JMenuItem("Font size");
         changeFontSize.addActionListener(this);
-        changeFont = new JMenuItem("Change changeFont");
+        changeFont = new JMenuItem("Change font");
         changeFont.addActionListener(this);
         changeFontColor = new JMenuItem("Font color");
         changeFontColor.addActionListener(this);
@@ -63,13 +58,11 @@ public class Page extends JFrame implements ActionListener {
         changePassword.addActionListener(this);
         backToLogin = new JMenuItem("Log out");
         backToLogin.addActionListener(this);
-        exitProgram = new JMenuItem("Log out and exit"); // maybe add pop-up reminding to save first
-        exitProgram.addActionListener(this);
+        quitProgram = new JMenuItem("Quit"); // maybe add pop-up reminding to save first
+        quitProgram.addActionListener(this);
 
         fileMenu.add(openFile);
-//        fileMenu.add(changeFileName);
         fileMenu.add(saveFile);
-//        fileMenu.add(saveAndExitFile);
         fileMenu.add(exitFile);
         editMenu.add(findAndReplace);
         formatMenu.add(changeFontStyle);
@@ -79,17 +72,19 @@ public class Page extends JFrame implements ActionListener {
         formatMenu.add(changeBackgroundColor);
         helpMenu.add(changePassword);
         helpMenu.add(backToLogin);
-        helpMenu.add(exitProgram);
+        helpMenu.add(quitProgram);
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
         menuBar.add(formatMenu);
         menuBar.add(helpMenu);
 
         textPane.setEditable(true);
-        textPane.setPreferredSize(new Dimension(500, 500));
+        // make textPane grow if frame is resized
+        textPane.setPreferredSize(new Dimension(500,500));
+        textPane.setForeground(Color.BLACK);
         // TODO: fix: if words are too long, they go off the page
 
-        JScrollPane scrollPane = new JScrollPane(textPane);
+        JScrollPane scrollPane = new JScrollPane(textPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         JPanel panel = new JPanel();
         // work on finding right border ratio
@@ -106,11 +101,9 @@ public class Page extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (openFile.equals(source)) openFile();
-//        else if (changeFileName.equals(source)) changeFileName();
         else if (saveFile.equals(source)) saveFile();
-        else if (exitFile.equals(source)) exitFile();
             // TODO: add warning: Are you sure you want to exit the current file without saving?
-//        else if (saveAndExitFile.equals(source)) System.out.println("Saving and exiting file");
+        else if (exitFile.equals(source)) exitFile();
         else if (findInFile.equals(source)) System.out.println("Finding...");
         else if (findAndReplace.equals(source)) System.out.println("Finding and replacing");
         else if (changeFontStyle.equals(source)) new FontStyler();
@@ -120,11 +113,10 @@ public class Page extends JFrame implements ActionListener {
         else if (changeBackgroundColor.equals(source)) changeBackgroundColor();
         else if (changePassword.equals(source)) new PasswordChanger();
         else if (backToLogin.equals(source)) backToLogin();
-        else if (exitProgram.equals(source)) exitProgram();
+        else if (quitProgram.equals(source)) quitProgram();
     }
 
     private void openFile() {
-        // how to make it so only text-files can be opened?
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("."));
         fileChooser.addChoosableFileFilter(new TextFileFilter());
@@ -132,7 +124,7 @@ public class Page extends JFrame implements ActionListener {
         int response = fileChooser.showOpenDialog(this);
         if (response == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            this.setTitle(file.getName());
+            // is there a faster way to write files to the text pane?
             try (BufferedReader in = new BufferedReader(new FileReader(file))) {
                 // used code from https://www.techiedelight.com/how-to-read-a-file-using-bufferedreader-in-java/
                 StringBuilder content = new StringBuilder();
@@ -144,20 +136,8 @@ public class Page extends JFrame implements ActionListener {
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
+            this.setTitle(file.getName());
         }
-    }
-
-    private void changeFileName() {
-        // TODO: work on this
-        // how to know which file is currently being edited?
-        File file = new File(this.getTitle());
-        // TODO: make JOptionPane to get user input, check userInput for validity, can't change file type (?)
-        String answer = JOptionPane.showInputDialog("Enter new file name here: ");
-//        file.renameTo();
-        File renamed = new File(answer);
-        System.out.println("Changing file name to " + answer);
-//        file.renameTo(renamed);
-//        this.setTitle(renamed.getName());
     }
 
     private void saveFile() {
@@ -170,10 +150,10 @@ public class Page extends JFrame implements ActionListener {
         if (response == JFileChooser.APPROVE_OPTION) {
             // TODO: find out how to save and recall changeFont and background color info
             File file = fileChooser.getSelectedFile();
-            try (BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
-                out.write(textPane.getText());
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+            try {
+                textPane.write(new BufferedWriter(new FileWriter(file)));
+            } catch (IOException exception) {
+                exception.printStackTrace();
             }
         }
     }
@@ -183,8 +163,9 @@ public class Page extends JFrame implements ActionListener {
         System.out.println("Are you sure you want to exit the current file without saving?");
         this.dispose();
         // not working yet
-//        textPane.setText("");
-        new Page();
+        // do I have to reset all settings manually?
+        textPane.setText("");
+//        new Page();
     }
 
     private void changeFontColor() {
@@ -204,7 +185,7 @@ public class Page extends JFrame implements ActionListener {
         new LoginPage();
     }
 
-    private void exitProgram() {
+    private void quitProgram() {
         // how to know if the file has recently been saved?
         int answer = JOptionPane.showConfirmDialog(
                 this,
