@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,12 +7,11 @@ import java.io.*;
 
 public class Page extends JFrame implements ActionListener {
     private final JMenuItem openFile;
-    private final JMenuItem changeFileName;
     private final JMenuItem saveFile;
-    private final JMenuItem saveAndExitFile;
     private final JMenuItem exitFile;
+    private final JMenuItem findInFile;
     private final JMenuItem findAndReplace;
-    private final JMenuItem fontStyle;
+    private final JMenuItem changeFontStyle;
     private final JMenuItem changeFontSize;
     private final JMenuItem changeFont;
     private final JMenuItem changeFontColor;
@@ -37,21 +37,23 @@ public class Page extends JFrame implements ActionListener {
 
         openFile = new JMenuItem("Open");
         openFile.addActionListener(this);
-        changeFileName = new JMenuItem("Change file name");
-        changeFileName.addActionListener(this);
+//        changeFileName = new JMenuItem("Change file name");
+//        changeFileName.addActionListener(this);
         saveFile = new JMenuItem("Save");
         saveFile.addActionListener(this);
-        saveAndExitFile = new JMenuItem("Save and exit");
-        saveAndExitFile.addActionListener(this);
+//        saveAndExitFile = new JMenuItem("Save and exit");
+//        saveAndExitFile.addActionListener(this);
         exitFile = new JMenuItem("Exit");
         exitFile.addActionListener(this);
+        findInFile = new JMenuItem("Find...");
+        findInFile.addActionListener(this);
         findAndReplace = new JMenuItem("Find and replace");
         findAndReplace.addActionListener(this);
-        fontStyle = new JMenuItem("Font style");
-        fontStyle.addActionListener(this);
+        changeFontStyle = new JMenuItem("Font style");
+        changeFontStyle.addActionListener(this);
         changeFontSize = new JMenuItem("Font size");
         changeFontSize.addActionListener(this);
-        changeFont = new JMenuItem("Change font");
+        changeFont = new JMenuItem("Change changeFont");
         changeFont.addActionListener(this);
         changeFontColor = new JMenuItem("Font color");
         changeFontColor.addActionListener(this);
@@ -65,12 +67,12 @@ public class Page extends JFrame implements ActionListener {
         exitProgram.addActionListener(this);
 
         fileMenu.add(openFile);
-        fileMenu.add(changeFileName);
+//        fileMenu.add(changeFileName);
         fileMenu.add(saveFile);
-        fileMenu.add(saveAndExitFile);
+//        fileMenu.add(saveAndExitFile);
         fileMenu.add(exitFile);
         editMenu.add(findAndReplace);
-        formatMenu.add(fontStyle);
+        formatMenu.add(changeFontStyle);
         formatMenu.add(changeFontSize);
         formatMenu.add(changeFont);
         formatMenu.add(changeFontColor);
@@ -89,7 +91,12 @@ public class Page extends JFrame implements ActionListener {
 
         JScrollPane scrollPane = new JScrollPane(textPane);
 
-        this.add(scrollPane);
+        JPanel panel = new JPanel();
+        // work on finding right border ratio
+//        panel.setBorder(new EmptyBorder(20,20,20,20));
+        panel.add(scrollPane);
+
+        this.add(panel);
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -99,13 +106,14 @@ public class Page extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (openFile.equals(source)) openFile();
-        else if (changeFileName.equals(source)) changeFileName();
+//        else if (changeFileName.equals(source)) changeFileName();
         else if (saveFile.equals(source)) saveFile();
         else if (exitFile.equals(source)) exitFile();
             // TODO: add warning: Are you sure you want to exit the current file without saving?
-        else if (saveAndExitFile.equals(source)) System.out.println("Saving and exiting file");
+//        else if (saveAndExitFile.equals(source)) System.out.println("Saving and exiting file");
+        else if (findInFile.equals(source)) System.out.println("Finding...");
         else if (findAndReplace.equals(source)) System.out.println("Finding and replacing");
-        else if (fontStyle.equals(source)) new FontStyler();
+        else if (changeFontStyle.equals(source)) new FontStyler();
         else if (changeFontSize.equals(source)) new FontSizer();
         else if (changeFont.equals(source)) new FontSelector();
         else if (changeFontColor.equals(source)) changeFontColor();
@@ -160,7 +168,7 @@ public class Page extends JFrame implements ActionListener {
         fileChooser.setCurrentDirectory(new File("."));
         int response = fileChooser.showSaveDialog(this);
         if (response == JFileChooser.APPROVE_OPTION) {
-            // TODO: find out how to save and recall font and background color info
+            // TODO: find out how to save and recall changeFont and background color info
             File file = fileChooser.getSelectedFile();
             try (BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
                 out.write(textPane.getText());
@@ -182,8 +190,8 @@ public class Page extends JFrame implements ActionListener {
     private void changeFontColor() {
         // TODO: find out how to color only specific text
         // TODO: fix so color can be changed before text is input
-        Color fontColor = JColorChooser.showDialog(this, "Color picker", null);
-        textPane.setForeground(fontColor);
+        Color changeFontColor = JColorChooser.showDialog(this, "Color picker", null);
+        textPane.setForeground(changeFontColor);
     }
 
     private void changeBackgroundColor() {
