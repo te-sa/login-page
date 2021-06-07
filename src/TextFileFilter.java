@@ -7,9 +7,12 @@ public class TextFileFilter extends FileFilter {
     @Override
     public boolean accept(File f) {
         if (f.isDirectory()) return true;
-        String ex = getExtension(f);
+        return validExtension(getExtension(f));
+    }
+
+    public static boolean validExtension(String ex) {
         if (ex != null) {
-            return ex.equals(".txt") || ex.equals(".pdf") || ex.equals(".java")  || ex.equals(".md");
+            return ex.equals(".txt") || ex.equals(".java")  || ex.equals(".md");
         }
         return false;
     }

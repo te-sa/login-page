@@ -141,19 +141,27 @@ public class Page extends JFrame implements ActionListener {
     }
 
     private void saveFile() {
-        // do I need to add a filter so files can only be saved with valid extensions?
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.addChoosableFileFilter(new TextFileFilter());
+        fileChooser.setAcceptAllFileFilterUsed(false);
         // https://stackoverflow.com/questions/356671/jfilechooser-showsavedialog-how-to-set-suggested-file-name
         fileChooser.setSelectedFile(new File(this.getTitle()));
         fileChooser.setCurrentDirectory(new File("."));
         int response = fileChooser.showSaveDialog(this);
+        boolean validExtension = TextFileFilter.validExtension(TextFileFilter.getExtension(fileChooser.getSelectedFile()));
         if (response == JFileChooser.APPROVE_OPTION) {
-            // TODO: find out how to save and recall changeFont and background color info
-            File file = fileChooser.getSelectedFile();
-            try {
-                textPane.write(new BufferedWriter(new FileWriter(file)));
-            } catch (IOException exception) {
-                exception.printStackTrace();
+            if (validExtension) {
+                // TODO: find out how to save and recall changeFont and background color info
+                File file = fileChooser.getSelectedFile();
+                try {
+                    textPane.write(new BufferedWriter(new FileWriter(file)));
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+                JOptionPane.showMessageDialog(this,"File saved successfully!");
+            } else {
+                JOptionPane.showMessageDialog(this,"Extension invalid, file could not be saved.\nValid extensions: .txt, .java, .md","Warning",JOptionPane.WARNING_MESSAGE);
+                saveFile();
             }
         }
     }
