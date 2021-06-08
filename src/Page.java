@@ -59,7 +59,7 @@ public class Page extends JFrame implements ActionListener {
         changePassword.addActionListener(this);
         backToLogin = new JMenuItem("Log out");
         backToLogin.addActionListener(this);
-        quitProgram = new JMenuItem("Quit"); // maybe add pop-up reminding to save first
+        quitProgram = new JMenuItem("Quit");
         quitProgram.addActionListener(this);
 
         fileMenu.add(openFile);
@@ -170,18 +170,9 @@ public class Page extends JFrame implements ActionListener {
 
     private void exitFile() {
         if (!fileSaved()) {
-            int answer = JOptionPane.showConfirmDialog(
-                    this,
-                    "Are you sure you want to exit the current file without saving?",
-                    "Warning",
-                    JOptionPane.OK_CANCEL_OPTION);
-            if (answer == JOptionPane.OK_OPTION) exit();
-        } else exit();
-    }
-
-    private void exit() {
-        this.dispose();
-        new Page();
+            if (answer("Are you sure you want to exit the current file without saving?") == JOptionPane.OK_OPTION)
+                exit("file");
+        } else exit("file");
     }
 
     private boolean fileSaved() {
@@ -209,28 +200,35 @@ public class Page extends JFrame implements ActionListener {
 
     private void backToLogin() {
         if (!fileSaved()) {
-            int answer = JOptionPane.showConfirmDialog(
-                    this,
-                    "Are you sure you want to quit the program and return to login without saving?",
-                    "Warning",
-                    JOptionPane.OK_CANCEL_OPTION);
-            if (answer == JOptionPane.OK_OPTION) exitToLogin();
-        } else exitToLogin();
-    }
-
-    private void exitToLogin() {
-        this.dispose();
-        new LoginPage();
+            if (answer("Are you sure you want to quit the program and return to login without saving?") == JOptionPane.OK_OPTION)
+                exit("to login");
+        } else exit("to login");
     }
 
     private void quitProgram() {
         if (!fileSaved()) {
-            int answer = JOptionPane.showConfirmDialog(
-                    this,
-                    "Are you sure you want to quit the program without saving?",
-                    "Warning",
-                    JOptionPane.OK_CANCEL_OPTION);
-            if (answer == JOptionPane.OK_OPTION) System.exit(0);
+            if (answer("Are you sure you want to quit the program without saving?") == JOptionPane.OK_OPTION)
+                System.exit(0);
         } else System.exit(0);
+    }
+
+    private int answer(String message) {
+        return JOptionPane.showConfirmDialog(
+                this,
+                message,
+                "Warning",
+                JOptionPane.OK_CANCEL_OPTION);
+    }
+
+    private void exit(String s) {
+        this.dispose();
+        switch (s) {
+            case "to login" -> {
+                new LoginPage();
+            }
+            case "file" -> {
+                new Page();
+            }
+        }
     }
 }
