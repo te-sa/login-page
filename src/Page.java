@@ -171,7 +171,7 @@ public class Page extends JFrame implements ActionListener {
     }
 
     private void exitFile() {
-        if (!fileSaved()) {
+        if (notSaved()) {
             if (answer("Are you sure you want to exit the current file without saving?") == JOptionPane.OK_OPTION)
                 exit("file");
         } else exit("file");
@@ -190,14 +190,14 @@ public class Page extends JFrame implements ActionListener {
     }
 
     private void backToLogin() {
-        if (!fileSaved()) {
+        if (notSaved()) {
             if (answer("Are you sure you want to quit the program and return to login without saving?") == JOptionPane.OK_OPTION)
                 exit("to login");
         } else exit("to login");
     }
 
     private void quitProgram() {
-        if (!fileSaved()) {
+        if (notSaved()) {
             if (answer("Are you sure you want to quit the program without saving?") == JOptionPane.OK_OPTION)
                 System.exit(0);
         } else System.exit(0);
@@ -206,14 +206,14 @@ public class Page extends JFrame implements ActionListener {
 
     // ** HELPER METHODS **
 
-    private boolean fileSaved() {
-        if (this.getTitle().equals("page")) return false;
+    private boolean notSaved() {
+        if (this.getTitle().equals("page")) return true;
         File f = new File(this.getTitle());
         try {
-            return textPane.getText().equals(Files.readString(f.toPath()));
+            return !textPane.getText().equals(Files.readString(f.toPath()));
         } catch (IOException exception) {
             exception.printStackTrace();
-            return false;
+            return true;
         }
     }
 
