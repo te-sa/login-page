@@ -20,7 +20,7 @@ public class Page extends JFrame implements ActionListener {
     private final JMenuItem backToLogin;
     private final JMenuItem quitProgram;
 
-    static final JTextPane textPane = new JTextPane();
+    static JTextPane textPane;
 
     Page() {
         this.setTitle("page");
@@ -79,6 +79,7 @@ public class Page extends JFrame implements ActionListener {
         menuBar.add(formatMenu);
         menuBar.add(helpMenu);
 
+        textPane = new JTextPane();
         textPane.setEditable(true);
         // make textPane grow if frame is resized
         textPane.setPreferredSize(new Dimension(500, 500));
@@ -169,24 +170,24 @@ public class Page extends JFrame implements ActionListener {
 
     private void exitFile() {
         if (!fileSaved()) {
-            int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit the current file without saving?");
-            if (response == JOptionPane.OK_OPTION) exit();
+            int answer = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to exit the current file without saving?",
+                    "Warning",
+                    JOptionPane.OK_CANCEL_OPTION);
+            if (answer == JOptionPane.OK_OPTION) exit();
         } else exit();
     }
 
     private void exit() {
-        // not working yet
-        // do I have to reset all settings manually?
-//            textPane.setText("");
         this.dispose();
-//        new Page();
+        new Page();
     }
 
     private boolean fileSaved() {
         if (this.getTitle().equals("page")) return false;
         File f = new File(this.getTitle());
         try {
-            System.out.println(textPane.getText().equals(Files.readString(f.toPath())));
             return textPane.getText().equals(Files.readString(f.toPath()));
         } catch (IOException exception) {
             exception.printStackTrace();
@@ -207,17 +208,29 @@ public class Page extends JFrame implements ActionListener {
     }
 
     private void backToLogin() {
+        if (!fileSaved()) {
+            int answer = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to quit the program and return to login without saving?",
+                    "Warning",
+                    JOptionPane.OK_CANCEL_OPTION);
+            if (answer == JOptionPane.OK_OPTION) exitToLogin();
+        } else exitToLogin();
+    }
+
+    private void exitToLogin() {
         this.dispose();
         new LoginPage();
     }
 
     private void quitProgram() {
-        // how to know if the file has recently been saved?
-        int answer = JOptionPane.showConfirmDialog(
-                this,
-                "Are you sure you want to exit without saving?",
-                "Warning",
-                JOptionPane.OK_CANCEL_OPTION);
-        if (answer == JOptionPane.OK_OPTION) System.exit(0);
+        if (!fileSaved()) {
+            int answer = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to quit the program without saving?",
+                    "Warning",
+                    JOptionPane.OK_CANCEL_OPTION);
+            if (answer == JOptionPane.OK_OPTION) System.exit(0);
+        } else System.exit(0);
     }
 }
