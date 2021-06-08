@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.nio.file.Files;
 
 public class Page extends JFrame implements ActionListener {
     private final JMenuItem openFile;
@@ -80,7 +81,7 @@ public class Page extends JFrame implements ActionListener {
 
         textPane.setEditable(true);
         // make textPane grow if frame is resized
-        textPane.setPreferredSize(new Dimension(500,500));
+        textPane.setPreferredSize(new Dimension(500, 500));
         textPane.setForeground(Color.BLACK);
         // TODO: fix: if words are too long, they go off the page
 
@@ -158,22 +159,39 @@ public class Page extends JFrame implements ActionListener {
                 } catch (IOException exception) {
                     exception.printStackTrace();
                 }
-                JOptionPane.showMessageDialog(this,"File saved successfully!");
+                JOptionPane.showMessageDialog(this, "File saved successfully!");
             } else {
-                JOptionPane.showMessageDialog(this,"Extension invalid, file could not be saved.\nValid extensions: .txt, .java, .md","Warning",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Extension invalid, file could not be saved.\nValid extensions: .txt, .java, .md", "Warning", JOptionPane.WARNING_MESSAGE);
                 saveFile();
             }
         }
     }
 
     private void exitFile() {
-        // How to know if file has recently been saved?
-        System.out.println("Are you sure you want to exit the current file without saving?");
-        this.dispose();
+        if (!fileSaved()) {
+            int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit the current file without saving?");
+            if (response == JOptionPane.OK_OPTION) exit();
+        } else exit();
+    }
+
+    private void exit() {
         // not working yet
         // do I have to reset all settings manually?
-        textPane.setText("");
+//            textPane.setText("");
+        this.dispose();
 //        new Page();
+    }
+
+    private boolean fileSaved() {
+        if (this.getTitle().equals("page")) return false;
+        File f = new File(this.getTitle());
+        try {
+            System.out.println(textPane.getText().equals(Files.readString(f.toPath())));
+            return textPane.getText().equals(Files.readString(f.toPath()));
+        } catch (IOException exception) {
+            exception.printStackTrace();
+            return false;
+        }
     }
 
     private void changeFontColor() {
