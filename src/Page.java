@@ -104,7 +104,6 @@ public class Page extends JFrame implements ActionListener {
         Object source = e.getSource();
         if (openFile.equals(source)) openFile();
         else if (saveFile.equals(source)) saveFile();
-            // TODO: add warning: Are you sure you want to exit the current file without saving?
         else if (exitFile.equals(source)) exitFile();
         else if (findInFile.equals(source)) System.out.println("Finding...");
         else if (findAndReplace.equals(source)) System.out.println("Finding and replacing");
@@ -117,6 +116,9 @@ public class Page extends JFrame implements ActionListener {
         else if (backToLogin.equals(source)) backToLogin();
         else if (quitProgram.equals(source)) quitProgram();
     }
+
+
+    // ** METHODS CALLED FROM ACTION PERFORMED **
 
     private void openFile() {
         JFileChooser fileChooser = new JFileChooser();
@@ -175,17 +177,6 @@ public class Page extends JFrame implements ActionListener {
         } else exit("file");
     }
 
-    private boolean fileSaved() {
-        if (this.getTitle().equals("page")) return false;
-        File f = new File(this.getTitle());
-        try {
-            return textPane.getText().equals(Files.readString(f.toPath()));
-        } catch (IOException exception) {
-            exception.printStackTrace();
-            return false;
-        }
-    }
-
     private void changeFontColor() {
         // TODO: find out how to color only specific text
         // TODO: fix so color can be changed before text is input
@@ -212,6 +203,20 @@ public class Page extends JFrame implements ActionListener {
         } else System.exit(0);
     }
 
+
+    // ** HELPER METHODS **
+
+    private boolean fileSaved() {
+        if (this.getTitle().equals("page")) return false;
+        File f = new File(this.getTitle());
+        try {
+            return textPane.getText().equals(Files.readString(f.toPath()));
+        } catch (IOException exception) {
+            exception.printStackTrace();
+            return false;
+        }
+    }
+
     private int answer(String message) {
         return JOptionPane.showConfirmDialog(
                 this,
@@ -223,12 +228,8 @@ public class Page extends JFrame implements ActionListener {
     private void exit(String s) {
         this.dispose();
         switch (s) {
-            case "to login" -> {
-                new LoginPage();
-            }
-            case "file" -> {
-                new Page();
-            }
+            case "to login" -> new LoginPage();
+            case "file" -> new Page();
         }
     }
 }
