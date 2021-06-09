@@ -89,15 +89,7 @@ public class SignupPage extends JFrame {
     }
 
     public static boolean validPassword(String potentialPassword) {
-        // TODO: make this work
-        // use regex here?
-
-        // how long should a password be? At least 8 chars
-        // what should a valid password have?
-        // - upper and lower case letters
-        // - letters and numbers
-        // - at least one special character
-
+        // can I improve this method?
         // regex from https://stackoverflow.com/questions/18057962/regex-pattern-including-all-special-characters/18058074
         Pattern specialChars = Pattern.compile("[^\\w\\s]");
         Matcher matchSpecial = specialChars.matcher(potentialPassword);
@@ -106,23 +98,22 @@ public class SignupPage extends JFrame {
         Matcher matchNums = number.matcher(potentialPassword);
 
         if (potentialPassword.length() < 8) {
-            System.out.println("Your password should contain at least 8 characters");
+            JOptionPane.showMessageDialog(null, "Your password should contain at least 8 characters", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (potentialPassword.toUpperCase().equals(potentialPassword)
                 || potentialPassword.toLowerCase().equals(potentialPassword)) {
-            System.out.println("Your password should contain both uppercase and lowercase letters");
+            JOptionPane.showMessageDialog(null, "Your password should contain both uppercase and lowercase letters", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (!matchNums.find()) {
-            System.out.println("Your password should contain at least one number");
+            JOptionPane.showMessageDialog(null, "Your password should contain at least one number", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (!matchSpecial.find()) {
-            System.out.println("Your password should contain at least one special character");
+            JOptionPane.showMessageDialog(null, "Your password should contain at least one special character", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         } else {
-            System.out.println("Valid password");
+            JOptionPane.showMessageDialog(null, "Valid password");
             return true;
         }
-
     }
 }
 
@@ -156,7 +147,8 @@ class RedirectScreen extends JFrame {
         while (counter <= 100) {
             bar.setValue(counter);
             try {
-                Thread.sleep(500);
+                // how to find owner thread?
+                wait(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -51,11 +51,8 @@ public class PasswordChanger extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // TODO: make println statements into JOptionPanes
-        // I don't think matching like this is enough, any user can change any other users password rn
-        // seems like that isn't an issue
         if (LoginPage.matchingPassword(String.valueOf(passwordField.getPassword()))) {
             if (Arrays.equals(newPasswordField.getPassword(), confirmNewPasswordField.getPassword())) {
-                // how to actually change password?
                 // reference: https://stackoverflow.com/questions/20039980/java-replace-line-in-text-file
                 File passwords = new File("passwords.txt");
                 StringBuilder buffer = new StringBuilder();
@@ -76,11 +73,12 @@ public class PasswordChanger extends JFrame implements ActionListener {
                 } catch (IOException exception) {
                     exception.printStackTrace();
                 }
-                System.out.println("Password change successful!");
+                JOptionPane.showMessageDialog(this, "Password change successful!");
                 this.dispose();
             } else {
-                System.out.println("Passwords don't match");
+                JOptionPane.showMessageDialog(this, "Passwords don't match", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } else System.out.println("Invalid password, please retry");
+        } else
+            JOptionPane.showMessageDialog(this, "Invalid password, please retry", "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
