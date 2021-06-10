@@ -58,7 +58,8 @@ public class FontSelector extends JFrame implements ActionListener {
                     this.dispose();
                 }
             }
-            if (!fontSelected) System.out.println("No font selected");
+            if (!fontSelected)
+                JOptionPane.showMessageDialog(this, "No font selected", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

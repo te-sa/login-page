@@ -62,7 +62,8 @@ public class FontStyler extends JFrame implements ActionListener {
                     this.dispose();
                 }
             }
-            if (!styleSelected) System.out.println("No style selected");
+            if (!styleSelected)
+                JOptionPane.showMessageDialog(this, "No style selected", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
