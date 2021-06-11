@@ -6,6 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SignupPage extends JFrame {
+    private static String message;
+
     SignupPage() {
         // TODO: add a user-counter and display message: You are the nth user!
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -38,7 +40,7 @@ public class SignupPage extends JFrame {
                 JOptionPane.showMessageDialog(this, "The username " + potentialUsername + " is already taken!\nYou will have to pick another one", "", JOptionPane.ERROR_MESSAGE);
                 // IDEA: autogenerate valid usernames for signup like Reddit
             } else if (!validPassword(potentialPassword)) {
-                JOptionPane.showMessageDialog(this, "Please choose a valid password", "", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, message, "Please choose a valid password", JOptionPane.WARNING_MESSAGE);
             } else {
                 createNewAccount(potentialUsername, potentialPassword);
             }
@@ -98,17 +100,17 @@ public class SignupPage extends JFrame {
         Matcher matchNums = number.matcher(potentialPassword);
 
         if (potentialPassword.length() < 8) {
-            JOptionPane.showMessageDialog(null, "Your password should contain at least 8 characters", "Error", JOptionPane.ERROR_MESSAGE);
+            message = "Your password should contain at least 8 characters";
             return false;
         } else if (potentialPassword.toUpperCase().equals(potentialPassword)
                 || potentialPassword.toLowerCase().equals(potentialPassword)) {
-            JOptionPane.showMessageDialog(null, "Your password should contain both uppercase and lowercase letters", "Error", JOptionPane.ERROR_MESSAGE);
+            message = "Your password should contain both uppercase and lowercase letters";
             return false;
         } else if (!matchNums.find()) {
-            JOptionPane.showMessageDialog(null, "Your password should contain at least one number", "Error", JOptionPane.ERROR_MESSAGE);
+            message = "Your password should contain at least one number";
             return false;
         } else if (!matchSpecial.find()) {
-            JOptionPane.showMessageDialog(null, "Your password should contain at least one special character", "Error", JOptionPane.ERROR_MESSAGE);
+            message = "Your password should contain at least one special character";
             return false;
         } else {
             JOptionPane.showMessageDialog(null, "Valid password");
@@ -148,7 +150,7 @@ class RedirectScreen extends JFrame {
             bar.setValue(counter);
             try {
                 // how to find owner thread?
-                wait(500);
+                Thread.currentThread().wait(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
