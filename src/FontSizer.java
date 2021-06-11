@@ -62,7 +62,7 @@ public class FontSizer extends JFrame implements ActionListener {
                 }
             }
             if (!sizesSelected)
-                JOptionPane.showMessageDialog(this, "No sizes selected", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "No size selected", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

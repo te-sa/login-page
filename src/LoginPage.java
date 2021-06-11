@@ -27,7 +27,6 @@ public class LoginPage extends JFrame {
         JButton loginButton = new JButton("login");
         this.getRootPane().setDefaultButton(loginButton);
         loginButton.addActionListener(e -> {
-            // TODO: change so that username and password aren't hardcoded
             String inputUsername = textField.getText();
             String inputPassword = String.valueOf(passwordField.getPassword());
             if (takenUsername(inputUsername) && matchingPassword(inputPassword)) {
