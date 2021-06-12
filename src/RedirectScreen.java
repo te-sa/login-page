@@ -2,9 +2,10 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-// why is this not working when called from SignupPage?
 public class RedirectScreen extends JFrame {
-    JProgressBar bar;
+    private final JProgressBar bar;
+    private final Timer timer;
+    private int counter;
 
     RedirectScreen() {
         bar = new JProgressBar(0, 100);
@@ -23,22 +24,20 @@ public class RedirectScreen extends JFrame {
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-        fill();
+        // timer is much easier than meddling with threads
+        // still wondering why window would not update when called from another class than Main when using sleep()
+        timer = new Timer(500, e -> fill());
+        timer.start();
     }
 
-    // used code from: https://www.youtube.com/watch?v=JEI-fcfnFkc and https://www.geeksforgeeks.org/java-swing-jprogressbar/
     public void fill() {
-        int counter = 0;
-        while (counter <= 100) {
+        if (counter <= 100) {
             bar.setValue(counter);
-            try {
-                // can I even do this here?
-                Thread.currentThread().wait(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             counter += 10;
+        } else {
+            timer.stop();
+            new LoginPage();
+            this.dispose();
         }
-        this.dispose();
     }
 }

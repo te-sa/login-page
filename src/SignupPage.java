@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 public class SignupPage extends JFrame {
     private static String message;
 
+    // TODO: make signup experience more smooth
     SignupPage() {
         // TODO: add a user-counter and display message: You are the nth user!
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -87,7 +88,6 @@ public class SignupPage extends JFrame {
         JOptionPane.showMessageDialog(this, "Welcome, " + username + ", your account has been created!\nMake sure to save your login info!");
         new RedirectScreen();
         this.dispose();
-        new LoginPage();
     }
 
     public static boolean validPassword(String potentialPassword) {
