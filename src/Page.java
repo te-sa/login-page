@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.nio.file.Files;
 
@@ -24,8 +26,14 @@ public class Page extends JFrame implements ActionListener {
 
     Page() {
         this.setTitle("page");
-        // TODO: show warning before closing this way
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        // using code from https://stackoverflow.com/questions/15449022/show-prompt-before-closing-jframe
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                quitProgram();
+            }
+        });
         this.setResizable(false);
 
         JMenuBar menuBar = new JMenuBar();
