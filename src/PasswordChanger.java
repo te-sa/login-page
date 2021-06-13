@@ -50,7 +50,6 @@ public class PasswordChanger extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO: make println statements into JOptionPanes
         if (LoginPage.matchingPassword(String.valueOf(passwordField.getPassword()))) {
             if (Arrays.equals(newPasswordField.getPassword(), confirmNewPasswordField.getPassword())) {
                 // reference: https://stackoverflow.com/questions/20039980/java-replace-line-in-text-file

@@ -24,6 +24,7 @@ public class Page extends JFrame implements ActionListener {
 
     Page() {
         this.setTitle("page");
+        // TODO: show warning before closing this way
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setResizable(false);
 
