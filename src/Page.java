@@ -1,9 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.*;
 import java.nio.file.Files;
 
@@ -34,7 +31,6 @@ public class Page extends JFrame implements ActionListener {
                 quitProgram();
             }
         });
-        this.setResizable(false);
 
         JMenuBar menuBar = new JMenuBar();
         this.setJMenuBar(menuBar);
@@ -90,12 +86,20 @@ public class Page extends JFrame implements ActionListener {
 
         textPane = new JTextPane();
         textPane.setEditable(true);
-        // make textPane grow if frame is resized
-        textPane.setPreferredSize(new Dimension(500, 500));
         textPane.setForeground(Color.BLACK);
         // TODO: fix: if words are too long, they go off the page
 
         JScrollPane scrollPane = new JScrollPane(textPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(new Dimension(500, 500));
+        // to make textPane grow if frame is resized
+        // code from https://stackoverflow.com/questions/2303305/window-resize-event
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                scrollPane.setPreferredSize(new Dimension(getWidth(), getHeight()));
+            }
+        });
 
         JPanel panel = new JPanel();
         // work on finding right border ratio
