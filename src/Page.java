@@ -20,6 +20,7 @@ public class Page extends JFrame implements ActionListener {
     static JTextPane textPane;
 
     // TODO: figure out layout
+    // TODO: add bottom section with word count
 
     Page() {
         this.setTitle("page");
@@ -83,8 +84,9 @@ public class Page extends JFrame implements ActionListener {
         menuBar.add(helpMenu);
 
         textPane = new JTextPane();
+        // TODO: work on making certain words a certain color
+        // maybe add basic spell checking that way?
         textPane.setEditable(true);
-        textPane.setForeground(Color.BLACK);
         // TODO: fix: if words are too long, they go off the page
 
         JScrollPane scrollPane = new JScrollPane(textPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -132,7 +134,7 @@ public class Page extends JFrame implements ActionListener {
         topSection.add(selectorPanel);
 
         // helpful: https://www.logicbig.com/tutorials/java-swing/panel-menu-bar.html
-        JRootPane menuBarSection = new JRootPane();
+        JRootPane menuBarSection = new JRootPane(); // needs to be RootPane not Panel to work properly
         menuBarSection.setJMenuBar(menuBar);
 
         layout.setVerticalGroup(layout.createSequentialGroup()
@@ -148,6 +150,8 @@ public class Page extends JFrame implements ActionListener {
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+        // to set cursor to textPane (not fontSizer) https://stackoverflow.com/questions/18908902/set-cursor-on-a-jtextfield
+        textPane.requestFocusInWindow();
     }
 
     @Override
@@ -170,6 +174,8 @@ public class Page extends JFrame implements ActionListener {
     // ** METHODS CALLED FROM ACTION PERFORMED **
 
     private void openFile() {
+        // TODO: add warning if user tries to open a file when there is already text input
+        // "Do you want to save the changes made to this file before opening [insert file name]"
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("."));
         fileChooser.addChoosableFileFilter(new TextFileFilter());
@@ -230,6 +236,7 @@ public class Page extends JFrame implements ActionListener {
         // TODO: find out how to color only specific text
         // TODO: fix so color can be changed before text is input
         Color changeFontColor = JColorChooser.showDialog(this, "Color picker", null);
+        System.out.println(changeFontColor);
         textPane.setForeground(changeFontColor);
     }
 
