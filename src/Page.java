@@ -11,8 +11,6 @@ public class Page extends JFrame implements ActionListener {
     private final JMenuItem findInFile;
     private final JMenuItem findAndReplace;
     private final JMenuItem changeFontStyle;
-    private final JMenuItem changeFontSize;
-    private final JMenuItem changeFont;
     private final JMenuItem changeFontColor;
     private final JMenuItem changeBackgroundColor;
     private final JMenuItem changePassword;
@@ -21,8 +19,13 @@ public class Page extends JFrame implements ActionListener {
 
     static JTextPane textPane;
 
+    // TODO: figure out layout
+
     Page() {
         this.setTitle("page");
+        this.setMinimumSize(new Dimension(500, 500));
+        GroupLayout layout = new GroupLayout(this.getContentPane());
+        this.getContentPane().setLayout(layout);
         // using code from https://stackoverflow.com/questions/15449022/show-prompt-before-closing-jframe
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
@@ -33,7 +36,6 @@ public class Page extends JFrame implements ActionListener {
         });
 
         JMenuBar menuBar = new JMenuBar();
-        this.setJMenuBar(menuBar);
 
         JMenu fileMenu = new JMenu("File");
         JMenu editMenu = new JMenu("Edit");
@@ -52,10 +54,6 @@ public class Page extends JFrame implements ActionListener {
         findAndReplace.addActionListener(this);
         changeFontStyle = new JMenuItem("Font style");
         changeFontStyle.addActionListener(this);
-        changeFontSize = new JMenuItem("Font size");
-        changeFontSize.addActionListener(this);
-        changeFont = new JMenuItem("Change font");
-        changeFont.addActionListener(this);
         changeFontColor = new JMenuItem("Font color");
         changeFontColor.addActionListener(this);
         changeBackgroundColor = new JMenuItem("Background color");
@@ -70,15 +68,15 @@ public class Page extends JFrame implements ActionListener {
         fileMenu.add(openFile);
         fileMenu.add(saveFile);
         fileMenu.add(exitFile);
+        editMenu.add(findInFile);
         editMenu.add(findAndReplace);
         formatMenu.add(changeFontStyle);
-        formatMenu.add(changeFontSize);
-        formatMenu.add(changeFont);
         formatMenu.add(changeFontColor);
         formatMenu.add(changeBackgroundColor);
         helpMenu.add(changePassword);
         helpMenu.add(backToLogin);
         helpMenu.add(quitProgram);
+
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
         menuBar.add(formatMenu);
@@ -91,22 +89,62 @@ public class Page extends JFrame implements ActionListener {
 
         JScrollPane scrollPane = new JScrollPane(textPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setPreferredSize(new Dimension(500, 500));
+
+        JPanel panel = new JPanel();
+        // work on finding right border ratio
+//        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        panel.add(scrollPane);
+
         // to make textPane grow if frame is resized
         // code from https://stackoverflow.com/questions/2303305/window-resize-event
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                scrollPane.setPreferredSize(new Dimension(getWidth(), getHeight()));
+                panel.setPreferredSize(new Dimension(getWidth(), getHeight()));
+                scrollPane.setPreferredSize(new Dimension(panel.getWidth(), panel.getHeight()));
             }
         });
 
-        JPanel panel = new JPanel();
-        // work on finding right border ratio
-//        panel.setBorder(new EmptyBorder(20,20,20,20));
-        panel.add(scrollPane);
+        // ** FontSizer **
 
-        this.add(panel);
+        SpinnerModel spinnerModel = new SpinnerNumberModel(textPane.getFont().getSize(), 0, 100, 1);
+        JSpinner fontSizer = new JSpinner(spinnerModel);
+        fontSizer.addChangeListener(e -> textPane.setFont(new Font(textPane.getFont().getFontName(), textPane.getFont().getStyle(), (Integer) fontSizer.getValue())));
+        JLabel fontSizerLabel = new JLabel("Font size: ");
+
+        // ** FontSelector **
+
+        String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+        JComboBox<String> fontSelector = new JComboBox<>(fonts);
+        fontSelector.addActionListener(e -> textPane.setFont(new Font((String) fontSelector.getSelectedItem(), textPane.getFont().getStyle(), textPane.getFont().getSize())));
+        fontSelector.getModel().setSelectedItem(textPane.getFont().getFontName());
+        JLabel fontSelectorLabel = new JLabel("Font: ");
+
+        JPanel topSection = new JPanel();
+        JPanel sizerPanel = new JPanel();
+        sizerPanel.add(fontSizerLabel);
+        sizerPanel.add(fontSizer);
+        JPanel selectorPanel = new JPanel();
+        selectorPanel.add(fontSelectorLabel);
+        selectorPanel.add(fontSelector);
+        topSection.add(sizerPanel);
+        topSection.add(selectorPanel);
+
+        // helpful: https://www.logicbig.com/tutorials/java-swing/panel-menu-bar.html
+        JRootPane menuBarSection = new JRootPane();
+        menuBarSection.setJMenuBar(menuBar);
+
+        layout.setVerticalGroup(layout.createSequentialGroup()
+                .addComponent(topSection)
+                .addComponent(menuBarSection)
+                .addComponent(panel)
+        );
+        layout.setHorizontalGroup(layout.createParallelGroup()
+                .addComponent(topSection)
+                .addComponent(menuBarSection)
+                .addComponent(panel)
+        );
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -121,8 +159,6 @@ public class Page extends JFrame implements ActionListener {
         else if (findInFile.equals(source)) System.out.println("Finding...");
         else if (findAndReplace.equals(source)) System.out.println("Finding and replacing");
         else if (changeFontStyle.equals(source)) new FontStyler();
-        else if (changeFontSize.equals(source)) new FontSizer();
-        else if (changeFont.equals(source)) new FontSelector();
         else if (changeFontColor.equals(source)) changeFontColor();
         else if (changeBackgroundColor.equals(source)) changeBackgroundColor();
         else if (changePassword.equals(source)) new PasswordChanger();
