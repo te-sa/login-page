@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -17,6 +18,9 @@ public class Page extends JFrame implements ActionListener {
     private final JMenuItem backToLogin;
     private final JMenuItem quitProgram;
 
+    private int words;
+
+    // make this a JTextArea to fix the line wrapping problem?
     static JTextPane textPane;
 
     // TODO: figure out layout
@@ -86,6 +90,8 @@ public class Page extends JFrame implements ActionListener {
         textPane = new JTextPane();
         // TODO: work on making certain words a certain color
         // maybe add basic spell checking that way?
+        // why does this not work?
+        textPane.setMaximumSize(new Dimension(2480, 3508)); // size of an A4 sheet of paper in pixels
         textPane.setEditable(true);
         // TODO: fix: if words are too long, they go off the page
 
@@ -133,6 +139,10 @@ public class Page extends JFrame implements ActionListener {
         topSection.add(sizerPanel);
         topSection.add(selectorPanel);
 
+        JPanel bottomSection = new JPanel();
+        JLabel wordCount = new JLabel(words + " words");
+        bottomSection.add(wordCount);
+
         // helpful: https://www.logicbig.com/tutorials/java-swing/panel-menu-bar.html
         JRootPane menuBarSection = new JRootPane(); // needs to be RootPane not Panel to work properly
         menuBarSection.setJMenuBar(menuBar);
@@ -141,11 +151,13 @@ public class Page extends JFrame implements ActionListener {
                 .addComponent(topSection)
                 .addComponent(menuBarSection)
                 .addComponent(panel)
+                .addComponent(bottomSection)
         );
         layout.setHorizontalGroup(layout.createParallelGroup()
                 .addComponent(topSection)
                 .addComponent(menuBarSection)
                 .addComponent(panel)
+                .addComponent(bottomSection)
         );
         this.pack();
         this.setLocationRelativeTo(null);
@@ -174,8 +186,15 @@ public class Page extends JFrame implements ActionListener {
     // ** METHODS CALLED FROM ACTION PERFORMED **
 
     private void openFile() {
-        // TODO: add warning if user tries to open a file when there is already text input
-        // "Do you want to save the changes made to this file before opening [insert file name]"
+        // make prompt easier to understand?
+        if (notSaved()) {
+            if (answer("Do you want to save the changes made to this file before opening another file?") == JOptionPane.OK_OPTION) {
+                saveFile();
+            } else selectFileToOpen();
+        } else selectFileToOpen();
+    }
+
+    private void selectFileToOpen() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("."));
         fileChooser.addChoosableFileFilter(new TextFileFilter());
@@ -263,7 +282,9 @@ public class Page extends JFrame implements ActionListener {
     // ** HELPER METHODS **
 
     private boolean notSaved() {
-        if (this.getTitle().equals("page")) return true;
+        if (this.getTitle().equals("page")) {
+            return !textPane.getText().equals("");
+        }
         File f = new File(this.getTitle());
         try {
             return !textPane.getText().equals(Files.readString(f.toPath()));
