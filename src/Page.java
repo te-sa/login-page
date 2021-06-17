@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -25,6 +24,7 @@ public class Page extends JFrame implements ActionListener {
 
     // TODO: figure out layout
     // TODO: add bottom section with word count
+    // TODO: add warning when quitting using Quit Main (Command Q)
 
     Page() {
         this.setTitle("page");
@@ -87,18 +87,20 @@ public class Page extends JFrame implements ActionListener {
         menuBar.add(formatMenu);
         menuBar.add(helpMenu);
 
+        Dimension a4 = new Dimension(595, 842);
+
         textPane = new JTextPane();
         // TODO: work on making certain words a certain color
         // maybe add basic spell checking that way?
-        // why does this not work?
-        textPane.setMaximumSize(new Dimension(2480, 3508)); // size of an A4 sheet of paper in pixels
+        textPane.setSize(a4);
         textPane.setEditable(true);
-        // TODO: fix: if words are too long, they go off the page
+        // TODO: fix: if words are too long, they go off the page, fix by making it a textField instead?
 
         JScrollPane scrollPane = new JScrollPane(textPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setPreferredSize(new Dimension(500, 500));
 
         JPanel panel = new JPanel();
+        panel.setMaximumSize(a4);
         // work on finding right border ratio
 //        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
         panel.add(scrollPane);
@@ -141,6 +143,9 @@ public class Page extends JFrame implements ActionListener {
 
         JPanel bottomSection = new JPanel();
         JLabel wordCount = new JLabel(words + " words");
+        // from https://stackoverflow.com/questions/3680221/how-can-i-get-screen-resolution-in-java
+        bottomSection.setMaximumSize(new Dimension((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 100));
+        bottomSection.setBackground(Color.GREEN);
         bottomSection.add(wordCount);
 
         // helpful: https://www.logicbig.com/tutorials/java-swing/panel-menu-bar.html
@@ -156,7 +161,7 @@ public class Page extends JFrame implements ActionListener {
         layout.setHorizontalGroup(layout.createParallelGroup()
                 .addComponent(topSection)
                 .addComponent(menuBarSection)
-                .addComponent(panel)
+                .addComponent(panel, GroupLayout.Alignment.CENTER) // want to have sheet of paper in the middle, even when resized
                 .addComponent(bottomSection)
         );
         this.pack();
