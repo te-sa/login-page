@@ -7,7 +7,7 @@ public class FontSelector extends JFrame implements ActionListener {
     private final JRadioButton[] fonts;
     private final JButton submitButton;
 
-    FontSelector() {
+    FontSelector() { // to be deleted
         this.setResizable(false);
 
         JPanel panel = new JPanel();
@@ -51,9 +51,9 @@ public class FontSelector extends JFrame implements ActionListener {
                 if (font.isSelected()) {
                     System.out.println(font.getName() + " selected");
                     // using code from https://stackoverflow.com/questions/9336798/java-how-to-get-the-default-font-size-of-a-jtextpane
-                    Page.textPane.setFont(new Font(font.getName(), Page.textPane.getFont().getStyle(), Page.textPane.getFont().getSize()));
+                    Page.textArea.setFont(new Font(font.getName(), Page.textArea.getFont().getStyle(), Page.textArea.getFont().getSize()));
                     // how to print style instead of int representing style?
-                    System.out.println("Font: " + Page.textPane.getFont().getFontName() + " Style: " + Page.textPane.getFont().getStyle() + " Size: " + Page.textPane.getFont().getSize());
+                    System.out.println("Font: " + Page.textArea.getFont().getFontName() + " Style: " + Page.textArea.getFont().getStyle() + " Size: " + Page.textArea.getFont().getSize());
                     fontSelected = true;
                     this.dispose();
                 }

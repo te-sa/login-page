@@ -7,7 +7,7 @@ public class FontStyler extends JFrame implements ActionListener {
     private final JRadioButton[] styles;
     private final JButton submitButton;
 
-    FontStyler() {
+    FontStyler() { // to be deleted
         this.setResizable(false);
 
         JPanel panel = new JPanel();
@@ -56,8 +56,8 @@ public class FontStyler extends JFrame implements ActionListener {
                         case "Italic" -> Font.ITALIC;
                         default -> Font.PLAIN;
                     };
-                    Page.textPane.setFont(new Font(Page.textPane.getFont().getFontName(), fontStyle, Page.textPane.getFont().getSize()));
-                    System.out.println("Font: " + Page.textPane.getFont().getFontName() + " Style: " + fontStyle + " Size: " + Page.textPane.getFont().getSize());
+                    Page.textArea.setFont(new Font(Page.textArea.getFont().getFontName(), fontStyle, Page.textArea.getFont().getSize()));
+                    System.out.println("Font: " + Page.textArea.getFont().getFontName() + " Style: " + fontStyle + " Size: " + Page.textArea.getFont().getSize());
                     styleSelected = true;
                     this.dispose();
                 }

@@ -19,8 +19,7 @@ public class Page extends JFrame implements ActionListener {
 
     private int words;
 
-    // make this a JTextArea to fix the line wrapping problem?
-    static JTextPane textPane;
+    static JTextArea textArea;
 
     // TODO: figure out layout
     // TODO: add bottom section with word count
@@ -29,6 +28,7 @@ public class Page extends JFrame implements ActionListener {
     Page() {
         this.setTitle("page");
         this.setMinimumSize(new Dimension(500, 500));
+        this.setSize(500, 500); // how to set initial window size? This is not doing it
         GroupLayout layout = new GroupLayout(this.getContentPane());
         this.getContentPane().setLayout(layout);
         // using code from https://stackoverflow.com/questions/15449022/show-prompt-before-closing-jframe
@@ -89,18 +89,21 @@ public class Page extends JFrame implements ActionListener {
 
         Dimension a4 = new Dimension(595, 842);
 
-        textPane = new JTextPane();
-        // TODO: work on making certain words a certain color
+        textArea = new JTextArea();
+        // from https://www.youtube.com/watch?v=NKjqAQAtq-g
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        // TODO: work on making certain words a certain color (that would only work with a textPane)
         // maybe add basic spell checking that way?
-        textPane.setSize(a4);
-        textPane.setEditable(true);
-        // TODO: fix: if words are too long, they go off the page, fix by making it a textField instead?
+        textArea.setSize(a4);
+        textArea.setEditable(true);
+        // TODO: fix: if words are too long, they go off the page, fix by making it a textArea instead?
 
-        JScrollPane scrollPane = new JScrollPane(textPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(500, 500));
+        JScrollPane scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setMaximumSize(a4);
 
         JPanel panel = new JPanel();
-        panel.setMaximumSize(a4);
+        panel.setPreferredSize(a4);
         // work on finding right border ratio
 //        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
         panel.add(scrollPane);
@@ -116,19 +119,21 @@ public class Page extends JFrame implements ActionListener {
             }
         });
 
+        // inspired by: https://www.youtube.com/watch?v=NKjqAQAtq-g
+
         // ** FontSizer **
 
-        SpinnerModel spinnerModel = new SpinnerNumberModel(textPane.getFont().getSize(), 0, 100, 1);
+        SpinnerModel spinnerModel = new SpinnerNumberModel(textArea.getFont().getSize(), 0, 100, 1);
         JSpinner fontSizer = new JSpinner(spinnerModel);
-        fontSizer.addChangeListener(e -> textPane.setFont(new Font(textPane.getFont().getFontName(), textPane.getFont().getStyle(), (Integer) fontSizer.getValue())));
+        fontSizer.addChangeListener(e -> textArea.setFont(new Font(textArea.getFont().getFontName(), textArea.getFont().getStyle(), (Integer) fontSizer.getValue())));
         JLabel fontSizerLabel = new JLabel("Font size: ");
 
         // ** FontSelector **
 
         String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
         JComboBox<String> fontSelector = new JComboBox<>(fonts);
-        fontSelector.addActionListener(e -> textPane.setFont(new Font((String) fontSelector.getSelectedItem(), textPane.getFont().getStyle(), textPane.getFont().getSize())));
-        fontSelector.getModel().setSelectedItem(textPane.getFont().getFontName());
+        fontSelector.addActionListener(e -> textArea.setFont(new Font((String) fontSelector.getSelectedItem(), textArea.getFont().getStyle(), textArea.getFont().getSize())));
+        fontSelector.getModel().setSelectedItem(textArea.getFont().getFontName());
         JLabel fontSelectorLabel = new JLabel("Font: ");
 
         JPanel topSection = new JPanel();
@@ -168,7 +173,7 @@ public class Page extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         // to set cursor to textPane (not fontSizer) https://stackoverflow.com/questions/18908902/set-cursor-on-a-jtextfield
-        textPane.requestFocusInWindow();
+        textArea.requestFocusInWindow();
     }
 
     @Override
@@ -215,7 +220,7 @@ public class Page extends JFrame implements ActionListener {
                 while ((line = in.readLine()) != null) {
                     content.append(line).append(System.lineSeparator());
                 }
-                textPane.setText(new String(content));
+                textArea.setText(new String(content));
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
@@ -237,7 +242,7 @@ public class Page extends JFrame implements ActionListener {
                 // TODO: find out how to save and recall changeFont and background color info
                 File file = fileChooser.getSelectedFile();
                 try {
-                    textPane.write(new BufferedWriter(new FileWriter(file)));
+                    textArea.write(new BufferedWriter(new FileWriter(file)));
                 } catch (IOException exception) {
                     exception.printStackTrace();
                 }
@@ -261,12 +266,12 @@ public class Page extends JFrame implements ActionListener {
         // TODO: fix so color can be changed before text is input
         Color changeFontColor = JColorChooser.showDialog(this, "Color picker", null);
         System.out.println(changeFontColor);
-        textPane.setForeground(changeFontColor);
+        textArea.setForeground(changeFontColor);
     }
 
     private void changeBackgroundColor() {
         Color color = JColorChooser.showDialog(this, "Color picker", Color.BLACK);
-        textPane.setBackground(color);
+        textArea.setBackground(color);
     }
 
     private void backToLogin() {
@@ -288,11 +293,11 @@ public class Page extends JFrame implements ActionListener {
 
     private boolean notSaved() {
         if (this.getTitle().equals("page")) {
-            return !textPane.getText().equals("");
+            return !textArea.getText().equals("");
         }
         File f = new File(this.getTitle());
         try {
-            return !textPane.getText().equals(Files.readString(f.toPath()));
+            return !textArea.getText().equals(Files.readString(f.toPath()));
         } catch (IOException exception) {
             exception.printStackTrace();
             return true;

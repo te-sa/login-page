@@ -7,7 +7,7 @@ public class FontSizer extends JFrame implements ActionListener {
     private final JRadioButton[] sizes;
     private final JButton submitButton;
 
-    FontSizer() {
+    FontSizer() { // to be deleted
         this.setResizable(false);
 
         JPanel panel = new JPanel();
@@ -54,9 +54,9 @@ public class FontSizer extends JFrame implements ActionListener {
             for (JRadioButton sizes : sizes) {
                 if (sizes.isSelected()) {
                     System.out.println(sizes.getName() + " selected");
-                    Page.textPane.setFont(new Font(Page.textPane.getFont().getFontName(), Page.textPane.getFont().getStyle(), Integer.parseInt(sizes.getName())));
+                    Page.textArea.setFont(new Font(Page.textArea.getFont().getFontName(), Page.textArea.getFont().getStyle(), Integer.parseInt(sizes.getName())));
                     // how to print style instead of int representing style?
-                    System.out.println("Font: " + Page.textPane.getFont().getFontName() + " Style: " + Page.textPane.getFont().getStyle() + " Size: " + Page.textPane.getFont().getSize());
+                    System.out.println("Font: " + Page.textArea.getFont().getFontName() + " Style: " + Page.textArea.getFont().getStyle() + " Size: " + Page.textArea.getFont().getSize());
                     sizesSelected = true;
                     this.dispose();
                 }
