@@ -10,6 +10,8 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
     private final JMenuItem openFile;
     private final JMenuItem saveFile;
     private final JMenuItem exitFile;
+    private final JMenuItem undo;
+    private final JMenuItem redo;
     private final JMenuItem findInFile;
     private final JMenuItem findAndReplace;
     private final JMenuItem changeFontStyle;
@@ -25,7 +27,8 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
 
     // TODO: figure out layout
     // TODO: add warning when quitting using Quit Main (Command Q)
-    // TODO: add undo and redo buttons under Edit menu
+    // TODO: add undo and redo buttons under Edit menu (https://docs.oracle.com/javase/tutorial/uiswing/components/generaltext.html#filter)
+    // TODO: give users the option to change background colors for certain panels
 
     Page() {
         this.setTitle("page");
@@ -48,12 +51,18 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         JMenu formatMenu = new JMenu("Format");
         JMenu helpMenu = new JMenu("Help");
 
+        // TODO: add keyboard shortcuts (mnemonics) for JMenuItems
+
         openFile = new JMenuItem("Open");
         openFile.addActionListener(this);
         saveFile = new JMenuItem("Save");
         saveFile.addActionListener(this);
         exitFile = new JMenuItem("Exit");
         exitFile.addActionListener(this);
+        undo = new JMenuItem("Undo");
+        undo.addActionListener(this);
+        redo = new JMenuItem("Redo");
+        redo.addActionListener(this);
         findInFile = new JMenuItem("Find...");
         findInFile.addActionListener(this);
         findAndReplace = new JMenuItem("Find and replace");
@@ -74,6 +83,8 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         fileMenu.add(openFile);
         fileMenu.add(saveFile);
         fileMenu.add(exitFile);
+        editMenu.add(undo);
+        editMenu.add(redo);
         editMenu.add(findInFile);
         editMenu.add(findAndReplace);
         formatMenu.add(changeFontStyle);
@@ -151,7 +162,6 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         JPanel bottomSection = new JPanel();
         // from https://stackoverflow.com/questions/3680221/how-can-i-get-screen-resolution-in-java
         bottomSection.setMaximumSize(new Dimension((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 100));
-        bottomSection.setBackground(Color.GREEN);
         bottomSection.add(wordCounter);
 
         // helpful: https://www.logicbig.com/tutorials/java-swing/panel-menu-bar.html
@@ -184,6 +194,8 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         if (openFile.equals(source)) openFile();
         else if (saveFile.equals(source)) saveFile();
         else if (exitFile.equals(source)) exitFile();
+        else if (undo.equals(source)) System.out.println("Undoing last change...");
+        else if (redo.equals(source)) System.out.println("Redoing...");
         else if (findInFile.equals(source)) System.out.println("Finding...");
         else if (findAndReplace.equals(source)) System.out.println("Finding and replacing");
         else if (changeFontStyle.equals(source)) new FontStyler();
@@ -322,11 +334,12 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         }
     }
 
-    // inspired by https://www.javatpoint.com/word-count-in-java and
+    // inspired by https://www.javatpoint.com/word-count-in-java and https://stackoverflow.com/questions/26720785/using-string-methods-to-count-words
 
     private void countWords() {
         String[] words = Page.textArea.getText().split("\\s+");
-        wordCounter.setText(words.length + " words");
+        wordCounter.setText(words.length + " words"); // inspired by https://introcs.cs.princeton.edu/java/15inout/GUI.java.html
+        // just resetting text of existing label is much easier than trying to create a new one for every change
     }
 
     // ** DOCUMENT LISTENER METHODS **
