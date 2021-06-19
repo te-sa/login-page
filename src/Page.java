@@ -24,8 +24,8 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
     static JTextArea textArea;
 
     // TODO: figure out layout
-    // TODO: add bottom section with word count
     // TODO: add warning when quitting using Quit Main (Command Q)
+    // TODO: add undo and redo buttons under Edit menu
 
     Page() {
         this.setTitle("page");
