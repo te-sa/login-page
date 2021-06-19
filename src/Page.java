@@ -1,10 +1,12 @@
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.nio.file.Files;
 
-public class Page extends JFrame implements ActionListener {
+public class Page extends JFrame implements ActionListener, DocumentListener {
     private final JMenuItem openFile;
     private final JMenuItem saveFile;
     private final JMenuItem exitFile;
@@ -17,7 +19,7 @@ public class Page extends JFrame implements ActionListener {
     private final JMenuItem backToLogin;
     private final JMenuItem quitProgram;
 
-    private int words;
+    private final JLabel wordCounter = new JLabel(0 + " words");
 
     static JTextArea textArea;
 
@@ -28,7 +30,6 @@ public class Page extends JFrame implements ActionListener {
     Page() {
         this.setTitle("page");
         this.setMinimumSize(new Dimension(500, 500));
-        this.setSize(500, 500); // how to set initial window size? This is not doing it
         GroupLayout layout = new GroupLayout(this.getContentPane());
         this.getContentPane().setLayout(layout);
         // using code from https://stackoverflow.com/questions/15449022/show-prompt-before-closing-jframe
@@ -97,7 +98,8 @@ public class Page extends JFrame implements ActionListener {
         // maybe add basic spell checking that way?
         textArea.setSize(a4);
         textArea.setEditable(true);
-        // TODO: fix: if words are too long, they go off the page, fix by making it a textArea instead?
+
+        textArea.getDocument().addDocumentListener(this);
 
         JScrollPane scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setMaximumSize(a4);
@@ -147,11 +149,10 @@ public class Page extends JFrame implements ActionListener {
         topSection.add(selectorPanel);
 
         JPanel bottomSection = new JPanel();
-        JLabel wordCount = new JLabel(words + " words");
         // from https://stackoverflow.com/questions/3680221/how-can-i-get-screen-resolution-in-java
         bottomSection.setMaximumSize(new Dimension((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 100));
         bottomSection.setBackground(Color.GREEN);
-        bottomSection.add(wordCount);
+        bottomSection.add(wordCounter);
 
         // helpful: https://www.logicbig.com/tutorials/java-swing/panel-menu-bar.html
         JRootPane menuBarSection = new JRootPane(); // needs to be RootPane not Panel to work properly
@@ -171,6 +172,7 @@ public class Page extends JFrame implements ActionListener {
         );
         this.pack();
         this.setLocationRelativeTo(null);
+//        this.setSize(610, 600); // textArea is not at full height this way
         this.setVisible(true);
         // to set cursor to textPane (not fontSizer) https://stackoverflow.com/questions/18908902/set-cursor-on-a-jtextfield
         textArea.requestFocusInWindow();
@@ -318,5 +320,29 @@ public class Page extends JFrame implements ActionListener {
             case "to login" -> new LoginPage();
             case "file" -> new Page();
         }
+    }
+
+    // inspired by https://www.javatpoint.com/word-count-in-java and
+
+    private void countWords() {
+        String[] words = Page.textArea.getText().split("\\s+");
+        wordCounter.setText(words.length + " words");
+    }
+
+    // ** DOCUMENT LISTENER METHODS **
+
+    @Override
+    public void insertUpdate(DocumentEvent e) {
+        countWords();
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+        countWords();
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e) {
+        countWords();
     }
 }
