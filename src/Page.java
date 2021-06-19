@@ -318,9 +318,13 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
 
     // ** HELPER METHODS **
 
+    private boolean textAreaEmpty() {
+        return textArea.getText().equals("");
+    }
+
     private boolean notSaved() {
         if (this.getTitle().equals("page")) {
-            return !textArea.getText().equals("");
+            return !textAreaEmpty();
         }
         File f = new File(this.getTitle());
         try {
@@ -349,15 +353,13 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
 
     // inspired by https://www.javatpoint.com/word-count-in-java and https://stackoverflow.com/questions/26720785/using-string-methods-to-count-words
 
-    private void countWords() {
+    private void countWordsAndCharacters() {
         String[] words = Page.textArea.getText().split("\\s+");
-        wordCounter.setText(words.length + " words"); // inspired by https://introcs.cs.princeton.edu/java/15inout/GUI.java.html
+        // inspired by https://introcs.cs.princeton.edu/java/15inout/GUI.java.html
+        if (textAreaEmpty())
+            wordCounter.setText(0 + " words"); // need to set this so it doesn't say there is 1 word after deleting text
+        else wordCounter.setText(words.length + " words");
         // just resetting text of existing label is much easier than trying to create a new one for every change
-    }
-
-    // inspired by https://www.javatpoint.com/word-count-in-java
-
-    private void countCharacters() {
         characterCounter.setText(Page.textArea.getText().length() + " characters");
     }
 
@@ -365,19 +367,16 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
 
     @Override
     public void insertUpdate(DocumentEvent e) {
-        countWords();
-        countCharacters();
+        countWordsAndCharacters();
     }
 
     @Override
     public void removeUpdate(DocumentEvent e) {
-        countWords();
-        countCharacters();
+        countWordsAndCharacters();
     }
 
     @Override
     public void changedUpdate(DocumentEvent e) {
-        countWords();
-        countCharacters();
+        countWordsAndCharacters();
     }
 }
