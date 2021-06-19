@@ -29,7 +29,7 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
     // TODO: figure out layout
     // TODO: add warning when quitting using Quit Main (Command Q)
     // TODO: add undo and redo buttons under Edit menu (https://docs.oracle.com/javase/tutorial/uiswing/components/generaltext.html#filter)
-    // TODO: give users the option to change background colors for certain panels
+    // TODO: give users the option to change background colors for certain panels // bottomSection.setBackground(new Color(48, 213, 200));
 
     Page() {
         this.setTitle("page");
@@ -53,21 +53,29 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         JMenu helpMenu = new JMenu("Help");
 
         // TODO: add keyboard shortcuts (mnemonics) for JMenuItems
+        // code for accelerators: https://stackoverflow.com/questions/17808745/java-swing-inputevent-modifiers-for-various-hardware
 
         openFile = new JMenuItem("Open");
         openFile.addActionListener(this);
+        openFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         saveFile = new JMenuItem("Save");
         saveFile.addActionListener(this);
+        saveFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         exitFile = new JMenuItem("Exit");
         exitFile.addActionListener(this);
+        exitFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         undo = new JMenuItem("Undo");
         undo.addActionListener(this);
+        undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         redo = new JMenuItem("Redo");
         redo.addActionListener(this);
+        redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         findInFile = new JMenuItem("Find...");
         findInFile.addActionListener(this);
+        findInFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         findAndReplace = new JMenuItem("Find and replace");
         findAndReplace.addActionListener(this);
+        findAndReplace.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         changeFontStyle = new JMenuItem("Font style");
         changeFontStyle.addActionListener(this);
         changeFontColor = new JMenuItem("Font color");
@@ -84,6 +92,7 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         fileMenu.add(openFile);
         fileMenu.add(saveFile);
         fileMenu.add(exitFile);
+//        fileMenu.setMnemonic('F');
         editMenu.add(undo);
         editMenu.add(redo);
         editMenu.add(findInFile);
@@ -118,6 +127,7 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
 
         JPanel panel = new JPanel();
         panel.setPreferredSize(a4);
+        panel.setMaximumSize(a4);
         // work on finding right border ratio
 //        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
         panel.add(scrollPane);
