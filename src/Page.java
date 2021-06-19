@@ -22,6 +22,7 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
     private final JMenuItem quitProgram;
 
     private final JLabel wordCounter = new JLabel(0 + " words");
+    private final JLabel characterCounter = new JLabel(0 + " characters");
 
     static JTextArea textArea;
 
@@ -162,6 +163,8 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         JPanel bottomSection = new JPanel();
         // from https://stackoverflow.com/questions/3680221/how-can-i-get-screen-resolution-in-java
         bottomSection.setMaximumSize(new Dimension((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 100));
+        bottomSection.add(characterCounter);
+        bottomSection.add(new JLabel("\t\t\t"));
         bottomSection.add(wordCounter);
 
         // helpful: https://www.logicbig.com/tutorials/java-swing/panel-menu-bar.html
@@ -342,20 +345,29 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         // just resetting text of existing label is much easier than trying to create a new one for every change
     }
 
+    // inspired by https://www.javatpoint.com/word-count-in-java
+
+    private void countCharacters() {
+        characterCounter.setText(Page.textArea.getText().length() + " characters");
+    }
+
     // ** DOCUMENT LISTENER METHODS **
 
     @Override
     public void insertUpdate(DocumentEvent e) {
         countWords();
+        countCharacters();
     }
 
     @Override
     public void removeUpdate(DocumentEvent e) {
         countWords();
+        countCharacters();
     }
 
     @Override
     public void changedUpdate(DocumentEvent e) {
         countWords();
+        countCharacters();
     }
 }
