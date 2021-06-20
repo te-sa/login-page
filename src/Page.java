@@ -1,6 +1,9 @@
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -10,8 +13,8 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
     private final JMenuItem openFile;
     private final JMenuItem saveFile;
     private final JMenuItem exitFile;
-    private final JMenuItem undo;
-    private final JMenuItem redo;
+    private final JMenuItem undoChange;
+    private final JMenuItem redoChange;
     private final JMenuItem findInFile;
     private final JMenuItem findAndReplace;
     private final JMenuItem changeFontStyle;
@@ -21,6 +24,12 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
     private final JMenuItem backToLogin;
     private final JMenuItem quitProgram;
 
+    // ** COPIED CODE **
+
+    protected UndoAction undoAction;
+    protected RedoAction redoAction;
+    protected UndoManager undo = new UndoManager();
+
     private final JLabel wordCounter = new JLabel(0 + " words");
     private final JLabel characterCounter = new JLabel(0 + " characters");
 
@@ -28,7 +37,7 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
 
     // TODO: figure out layout
     // TODO: add warning when quitting using Quit Main (Command Q)
-    // TODO: add undo and redo buttons under Edit menu (https://docs.oracle.com/javase/tutorial/uiswing/components/generaltext.html#filter)
+    // TODO: add undo and redoChange buttons under Edit menu (https://docs.oracle.com/javase/tutorial/uiswing/components/generaltext.html#filter)
     // TODO: give users the option to change background colors for certain panels // bottomSection.setBackground(new Color(48, 213, 200));
 
     Page() {
@@ -64,12 +73,16 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         exitFile = new JMenuItem("Exit");
         exitFile.addActionListener(this);
         exitFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-        undo = new JMenuItem("Undo");
-        undo.addActionListener(this);
-        undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-        redo = new JMenuItem("Redo");
-        redo.addActionListener(this);
-        redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+
+        // ** PARTIALLY COPIED CODE **
+
+        undoAction = new UndoAction();
+        undoChange = new JMenuItem(undoAction);
+        undoChange.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        redoAction = new RedoAction();
+        redoChange = new JMenuItem(redoAction);
+        redoChange.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+
         findInFile = new JMenuItem("Find...");
         findInFile.addActionListener(this);
         findInFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
@@ -92,9 +105,8 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         fileMenu.add(openFile);
         fileMenu.add(saveFile);
         fileMenu.add(exitFile);
-//        fileMenu.setMnemonic('F');
-        editMenu.add(undo);
-        editMenu.add(redo);
+        editMenu.add(undoChange);
+        editMenu.add(redoChange);
         editMenu.add(findInFile);
         editMenu.add(findAndReplace);
         formatMenu.add(changeFontStyle);
@@ -121,6 +133,14 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         textArea.setEditable(true);
 
         textArea.getDocument().addDocumentListener(this);
+
+        // ** PARTIALLY COPIED CODE **
+
+        textArea.getDocument().addUndoableEditListener(e -> {
+            undo.addEdit(e.getEdit());
+            undoAction.updateUndoState();
+            redoAction.updateRedoState();
+        });
 
         JScrollPane scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setMaximumSize(a4);
@@ -207,8 +227,8 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         if (openFile.equals(source)) openFile();
         else if (saveFile.equals(source)) saveFile();
         else if (exitFile.equals(source)) exitFile();
-        else if (undo.equals(source)) System.out.println("Undoing last change...");
-        else if (redo.equals(source)) System.out.println("Redoing...");
+        else if (undoChange.equals(source)) System.out.println("Undoing last change...");
+        else if (redoChange.equals(source)) System.out.println("Redoing...");
         else if (findInFile.equals(source)) System.out.println("Finding...");
         else if (findAndReplace.equals(source)) System.out.println("Finding and replacing");
         else if (changeFontStyle.equals(source)) new FontStyler();
@@ -378,5 +398,94 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
     @Override
     public void changedUpdate(DocumentEvent e) {
         countWordsAndCharacters();
+    }
+
+    // ** COPIED THE SECTION BELOW AND ALL CODE ASSOCIATED WITH UNDO/REDO FUNCTIONALITY FROM https://docs.oracle.com/javase/tutorial/displayCode.html?code=https://docs.oracle.com/javase/tutorial/uiswing/examples/components/TextComponentDemoProject/src/components/TextComponentDemo.java **
+
+    /*
+     * Copyright (c) 1995, 2008, Oracle and/or its affiliates. All rights reserved.
+     *
+     * Redistribution and use in source and binary forms, with or without
+     * modification, are permitted provided that the following conditions
+     * are met:
+     *
+     *   - Redistributions of source code must retain the above copyright
+     *     notice, this list of conditions and the following disclaimer.
+     *
+     *   - Redistributions in binary form must reproduce the above copyright
+     *     notice, this list of conditions and the following disclaimer in the
+     *     documentation and/or other materials provided with the distribution.
+     *
+     *   - Neither the name of Oracle or the names of its
+     *     contributors may be used to endorse or promote products derived
+     *     from this software without specific prior written permission.
+     *
+     * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+     * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+     * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+     * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+     * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+     * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+     * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+     * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+     * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+     * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+     * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+     */
+
+    class UndoAction extends AbstractAction {
+        public UndoAction() {
+            super("Undo");
+            setEnabled(false);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            try {
+                undo.undo();
+            } catch (CannotUndoException ex) {
+                System.out.println("Unable to undo: " + ex);
+                ex.printStackTrace();
+            }
+            updateUndoState();
+            redoAction.updateRedoState();
+        }
+
+        protected void updateUndoState() {
+            if (undo.canUndo()) {
+                setEnabled(true);
+                putValue(Action.NAME, undo.getUndoPresentationName());
+            } else {
+                setEnabled(false);
+                putValue(Action.NAME, "Undo");
+            }
+        }
+    }
+
+    class RedoAction extends AbstractAction {
+        public RedoAction() {
+            super("Redo");
+            setEnabled(false);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            try {
+                undo.redo();
+            } catch (CannotRedoException ex) {
+                System.out.println("Unable to redo: " + ex);
+                ex.printStackTrace();
+            }
+            updateRedoState();
+            undoAction.updateUndoState();
+        }
+
+        protected void updateRedoState() {
+            if (undo.canRedo()) {
+                setEnabled(true);
+                putValue(Action.NAME, undo.getRedoPresentationName());
+            } else {
+                setEnabled(false);
+                putValue(Action.NAME, "Redo");
+            }
+        }
     }
 }
