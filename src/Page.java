@@ -43,9 +43,16 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
     // could I make undo and redo undo and redo entire words instead of individual characters?
 
     Page() {
-        // this works, but only once?
-        Application macApp = new Application();
-        macApp.setQuitHandler((e, response) -> quitProgram());
+        // adapted code from: https://stackoverflow.com/questions/10076104/java-swing-on-a-mac-listening-for-quit-event
+        Application macApp = new Application(); // find a way to do this without deprecated class
+        macApp.setQuitHandler((e, response) -> {
+            // modified quitProgram() method to work here:
+            if (notSaved()) {
+                if (answer("Are you sure you want to quit the program without saving?") == JOptionPane.OK_OPTION)
+                    response.performQuit();
+                else response.cancelQuit();
+            } else response.performQuit();
+        });
 
         this.setTitle("page");
         this.setMinimumSize(new Dimension(500, 500));
