@@ -1,3 +1,5 @@
+import com.apple.eawt.Application;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -41,6 +43,10 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
     // could I make undo and redo undo and redo entire words instead of individual characters?
 
     Page() {
+        // this works, but only once?
+        Application macApp = new Application();
+        macApp.setQuitHandler((e, response) -> quitProgram());
+
         this.setTitle("page");
         this.setMinimumSize(new Dimension(500, 500));
         GroupLayout layout = new GroupLayout(this.getContentPane());
