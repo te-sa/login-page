@@ -35,10 +35,10 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
 
     static JTextArea textArea;
 
-    // TODO: figure out layout
+    // TODO: figure out layout (use split pane for text editor?)
     // TODO: add warning when quitting using Quit Main (Command Q)
-    // TODO: add undo and redoChange buttons under Edit menu (https://docs.oracle.com/javase/tutorial/uiswing/components/generaltext.html#filter)
     // TODO: give users the option to change background colors for certain panels // bottomSection.setBackground(new Color(48, 213, 200));
+    // could I make undo and redo undo and redo entire words instead of individual characters?
 
     Page() {
         this.setTitle("page");

@@ -9,7 +9,7 @@ Ideas:
 - [ ] make it so files can only be opened by certain users (encrypt files?)
 - [X] allow users to close current document without exiting program
 - [X] make a method to give warnings if the user is trying to exit a file with unsaved changes
-- [ ] add undo and redo buttons under Edit menu
+- [X] add undo and redo buttons under Edit menu
 - [ ] add warning when quitting using Quit Main (Command Q)
 - [ ] give users the option to change background colors for certain panels
 
