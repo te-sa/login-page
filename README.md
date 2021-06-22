@@ -11,7 +11,7 @@ Ideas:
 - [X] make a method to give warnings if the user is trying to exit a file with unsaved changes
 - [X] add undo and redo buttons under Edit menu
 - [ ] add warning when quitting using Quit Main (Command Q)
-- [ ] give users the option to change background colors for certain panels
+- [ ] give users the option to change background colors for certain panels - working on it
 
 More things to learn about:
 - using RegEx

@@ -23,6 +23,7 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
     private final JMenuItem changeFontColor;
     private final JMenuItem changeBackgroundColor;
     private final JMenuItem changePassword;
+    private final JMenuItem setBottomColor;
     private final JMenuItem backToLogin;
     private final JMenuItem quitProgram;
 
@@ -35,11 +36,11 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
     private final JLabel wordCounter = new JLabel(0 + " words");
     private final JLabel characterCounter = new JLabel(0 + " characters");
 
+    private final JPanel bottomSection;
+
     static JTextArea textArea;
 
     // TODO: figure out layout (use split pane for text editor?)
-    // TODO: add warning when quitting using Quit Main (Command Q)
-    // TODO: give users the option to change background colors for certain panels // bottomSection.setBackground(new Color(48, 213, 200));
     // could I make undo and redo undo and redo entire words instead of individual characters?
 
     Page() {
@@ -110,6 +111,8 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         changeBackgroundColor.addActionListener(this);
         changePassword = new JMenuItem("Change password");
         changePassword.addActionListener(this);
+        setBottomColor = new JMenuItem("Set bottom panel color");
+        setBottomColor.addActionListener(this);
         backToLogin = new JMenuItem("Log out");
         backToLogin.addActionListener(this);
         quitProgram = new JMenuItem("Quit");
@@ -126,6 +129,7 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         formatMenu.add(changeFontColor);
         formatMenu.add(changeBackgroundColor);
         helpMenu.add(changePassword);
+        helpMenu.add(setBottomColor);
         helpMenu.add(backToLogin);
         helpMenu.add(quitProgram);
 
@@ -203,7 +207,7 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         topSection.add(sizerPanel);
         topSection.add(selectorPanel);
 
-        JPanel bottomSection = new JPanel();
+        bottomSection = new JPanel();
         // from https://stackoverflow.com/questions/3680221/how-can-i-get-screen-resolution-in-java
         bottomSection.setMaximumSize(new Dimension((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 100));
         bottomSection.add(characterCounter);
@@ -248,6 +252,7 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         else if (changeFontColor.equals(source)) changeFontColor();
         else if (changeBackgroundColor.equals(source)) changeBackgroundColor();
         else if (changePassword.equals(source)) new PasswordChanger();
+        else if (setBottomColor.equals(source)) setBottomColor();
         else if (backToLogin.equals(source)) backToLogin();
         else if (quitProgram.equals(source)) quitProgram();
     }
@@ -332,6 +337,12 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
     private void changeBackgroundColor() {
         Color color = JColorChooser.showDialog(this, "Color picker", Color.BLACK);
         textArea.setBackground(color);
+    }
+
+    private void setBottomColor() {
+        // also set one of the top components
+        Color color = JColorChooser.showDialog(this, "Color picker", Color.BLACK);
+        bottomSection.setBackground(color);
     }
 
     private void backToLogin() {
