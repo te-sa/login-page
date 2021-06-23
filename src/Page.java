@@ -343,6 +343,11 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         // also set one of the top components
         Color color = JColorChooser.showDialog(this, "Color picker", Color.BLACK);
         bottomSection.setBackground(color);
+        // maybe instead of inverse do a lighter shade for dark colors and a darker shade for light colors
+        Color inverse = new Color(255 - color.getRed(), 255 - color.getGreen(), 255 - color.getBlue());
+        characterCounter.setForeground(inverse);
+        wordCounter.setForeground(inverse);
+        this.setBackground(color);
     }
 
     private void backToLogin() {
