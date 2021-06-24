@@ -23,7 +23,7 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
     private final JMenuItem changeFontColor;
     private final JMenuItem changeBackgroundColor;
     private final JMenuItem changePassword;
-    private final JMenuItem setBottomColor;
+    private final JMenuItem setEditorColor;
     private final JMenuItem backToLogin;
     private final JMenuItem quitProgram;
 
@@ -36,12 +36,14 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
     private final JLabel wordCounter = new JLabel(0 + " words");
     private final JLabel characterCounter = new JLabel(0 + " characters");
 
+    private final JPanel panel;
     private final JPanel bottomSection;
 
     static JTextArea textArea;
 
     // TODO: figure out layout (use split pane for text editor?)
     // could I make undo and redo undo and redo entire words instead of individual characters?
+    // add settings menu instead of/in addition to help menu?
 
     Page() {
         // adapted code from: https://stackoverflow.com/questions/10076104/java-swing-on-a-mac-listening-for-quit-event
@@ -111,8 +113,8 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         changeBackgroundColor.addActionListener(this);
         changePassword = new JMenuItem("Change password");
         changePassword.addActionListener(this);
-        setBottomColor = new JMenuItem("Set bottom panel color");
-        setBottomColor.addActionListener(this);
+        setEditorColor = new JMenuItem("Set editor color");
+        setEditorColor.addActionListener(this);
         backToLogin = new JMenuItem("Log out");
         backToLogin.addActionListener(this);
         quitProgram = new JMenuItem("Quit");
@@ -129,7 +131,7 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         formatMenu.add(changeFontColor);
         formatMenu.add(changeBackgroundColor);
         helpMenu.add(changePassword);
-        helpMenu.add(setBottomColor);
+        helpMenu.add(setEditorColor);
         helpMenu.add(backToLogin);
         helpMenu.add(quitProgram);
 
@@ -162,7 +164,7 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         JScrollPane scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setMaximumSize(a4);
 
-        JPanel panel = new JPanel();
+        panel = new JPanel();
         panel.setPreferredSize(a4);
         panel.setMaximumSize(a4);
         // work on finding right border ratio
@@ -252,7 +254,7 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         else if (changeFontColor.equals(source)) changeFontColor();
         else if (changeBackgroundColor.equals(source)) changeBackgroundColor();
         else if (changePassword.equals(source)) new PasswordChanger();
-        else if (setBottomColor.equals(source)) setBottomColor();
+        else if (setEditorColor.equals(source)) setEditorColor();
         else if (backToLogin.equals(source)) backToLogin();
         else if (quitProgram.equals(source)) quitProgram();
     }
@@ -339,15 +341,23 @@ public class Page extends JFrame implements ActionListener, DocumentListener {
         textArea.setBackground(color);
     }
 
-    private void setBottomColor() {
-        // also set one of the top components
+    private void setEditorColor() {
+        // also want to set the color of the menuBar
         Color color = JColorChooser.showDialog(this, "Color picker", Color.BLACK);
         bottomSection.setBackground(color);
-        // maybe instead of inverse do a lighter shade for dark colors and a darker shade for light colors
-        Color inverse = new Color(255 - color.getRed(), 255 - color.getGreen(), 255 - color.getBlue());
-        characterCounter.setForeground(inverse);
-        wordCounter.setForeground(inverse);
-        this.setBackground(color);
+
+        // code from https://www.nbdtech.com/Blog/archive/2008/04/27/Calculating-the-Perceived-Brightness-of-a-Color.aspx
+        // maybe work on doing a lighter shade of darker colors and a darker shade of lighter colours instead
+        double brightness = Math.sqrt(0.241 * color.getRed() + color.getRed() +
+                0.691 * color.getGreen() * color.getGreen() +
+                0.068 * color.getBlue() * color.getBlue());
+        Color textColor = brightness < 127.5 ? Color.WHITE : Color.BLACK;
+
+        characterCounter.setForeground(textColor);
+        wordCounter.setForeground(textColor);
+
+        this.getContentPane().setBackground(color.brighter().brighter().brighter());
+        panel.setBackground(color.brighter().brighter().brighter());
     }
 
     private void backToLogin() {
